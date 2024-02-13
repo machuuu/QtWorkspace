@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>AirwayVertexShader.glsl</file>
+        <file>AirwayFragmentShader.glsl</file>
+    </qresource>
+</RCC>

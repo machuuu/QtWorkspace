@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>AxialSliceCompute.glsl</file>
+        <file>CoronalSliceCompute.glsl</file>
+        <file>SagittalSliceCompute.glsl</file>
+        <file>AxialSlabCompute.glsl</file>
+		<file>ObliqueSliceCompute.glsl</file>
+    </qresource>
+</RCC>

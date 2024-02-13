@@ -1,0 +1,30 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 22,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "VS2022",
+            "displayName": "Configure preset using VS2022",
+            "description": "Sets VS2022 generator, build and install directory",
+            "generator": "Visual Studio 17 2022",
+            "binaryDir": "${sourceDir}/../myQtWorkspace.Build",
+            "installDir": "${sourceDir}/../myQtWorkspace.Install",
+            "debug": {
+                "find": false
+            },
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",     
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
+            "toolset": {
+                "value": "v143",
+                "strategy": "set"
+            }
+        }
+    ]
+}

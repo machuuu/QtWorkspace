@@ -1,0 +1,229 @@
+cmake_minimum_required(VERSION 3.8.2)
+
+project(CubeExample)
+
+find_package(Qt5Core)
+find_package(Qt5Widgets)
+find_package(Qt5Gui)
+
+include(CMake/MQT5Config.cmake)
+include(CMake/Qt5_dll_CopyMacro.cmake)
+
+set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+set(LIB_DIR "D:/Dev/Libraries" CACHE PATH "Path to Libraries")
+set(DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data" CACHE PATH "Path to Data")
+set(CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/config" CACHE PATH "Path to Config")
+set(SHADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/shaders" CACHE PATH "Path to Shaders")
+
+configure_file("${CONFIG_DIR}/configure.h.in" "${CONFIG_DIR}/configure.h")
+
+# set(CMAKE_AUTOMOC ON)
+# set(CMAKE_AUTOUIC ON)
+# set(CMAKE_AUTORCC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(SOURCE_FILES 
+	main.cpp
+	AirwayRenderWidget.cpp
+	AirwayRenderWidget.h
+	mmOpenGLErrorCheck.h
+	AirwayTreeEngine.cpp
+	AirwayTreeEngine.h
+	"${DATA_DIR}/ROIMTEXT.ply"
+	"${DATA_DIR}/ROIMT.ply"
+	# "${SHADER_DIR}/AirwayVertexShader.glsl"
+	# "${SHADER_DIR}/AirwayFragmentShader.glsl"
+	Camera6DoF.h
+	Camera6DoF.cpp
+	"${CONFIG_DIR}/configure.h.in"
+	MainWindow.cpp
+	MainWindow.h
+	AxialSlicerWidget.cpp
+	AxialSlicerWidget.h
+	CoronalSlicerWidget.cpp
+	CoronalSlicerWidget.h
+	SagittalSlicerWidget.cpp
+	SagittalSlicerWidget.h
+	CTVolume.cpp
+	CTVolume.h
+	# "${SHADER_DIR}/AxialSliceCompute.glsl"
+	# "${SHADER_DIR}/CoronalSliceCompute.glsl"
+	# "${SHADER_DIR}/SagittalSliceCompute.glsl"
+	# "${SHADER_DIR}/SlicerVertex.glsl"
+	# "${SHADER_DIR}/SlicerFragment.glsl"
+	SlicerDisplay.cpp
+	SlicerDisplay.h
+	# "${SHADER_DIR}/CrosshairVertex.glsl"
+	# "${SHADER_DIR}/CrosshairFragment.glsl"
+	mmUtilityTools.cpp
+	mmUtilityTools.h
+	Crosshair.cpp
+	Crosshair.h
+	AxialSlabWidget.cpp
+	AxialSlabWidget.h
+	SlicerBase.cpp
+	SlicerBase.h
+	SlabBase.cpp
+	SlabBase.h
+	ObliqueSlicerWidget.cpp
+	ObliqueSlicerWidget.h
+	ObliqueSlicerBase.cpp
+	ObliqueSlicerBase.h
+	SlicerCamera.cpp
+	SlicerCamera.h
+	"${CONFIG_DIR}/configure.h"
+)
+
+include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+
+#source_group("Resource Files" FILES ${RESOURCE_FILES})
+#set(SOURCE_FILES ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
+
+set(MOC_HEADERS 
+	AirwayRenderWidget.h
+	MainWindow.h
+	AxialSlicerWidget.h
+	CoronalSlicerWidget.h
+	SagittalSlicerWidget.h
+	ObliqueSlicerWidget.h
+	SlicerDisplay.h
+	AxialSlabWidget.h
+	# SlicerBase.h
+	)
+
+set(RESOURCES
+	"${SHADER_DIR}/AirwayShaders.qrc"
+	"${SHADER_DIR}/ComputeShaders.qrc"
+	"${SHADER_DIR}/SlicerShaders.qrc"
+	"${SHADER_DIR}/CrosshairShaders.qrc"
+	)
+
+set(MOC_OUT_FILES)
+set(RCC_OUT_FILES)
+
+qt5_wrap_cpp(MOC_OUT_FILES ${MOC_HEADERS})
+qt5_add_resources(RCC_OUT_FILES ${RESOURCES})
+
+set(GEN_OUT_FILES)
+list(APPEND GEN_OUT_FILES ${MOC_OUT_FILES} ${RCC_OUT_FILES})
+
+set(RES_OUT_FILES)
+set(GEN_OUT_FILES ${MOC_OUT_FILES} ${RCC_OUT_FILES})
+
+mf_qt5_vs_source_group_resource(RES_OUT_FILES ${RESOURCES})
+mf_qt5_vs_source_group_generated(${GEN_OUT_FILES})
+
+list(APPEND GEN_OUT_FILES ${RES_OUT_FILES})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+# Update source files for the add_executable command
+set(SOURCE_FILES ${SOURCE_FILES} ${GEN_OUT_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+# Organize target into a group in Visual Studio IDE
+IF (DEFINED TARGET_FOLDER)
+	set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${TARGET_FOLDER})
+ENDIF()
+
+#add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${MOC_HEADER_FILES} ${RES_FILES})
+#add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${MOC_HEADERS} ${RESOURCES})
+#add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${MOC_HEADERS} ${RES_FILES})
+#add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${RES_FILES})
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Core Qt5::Gui)
+
+# Copy dll into the build folder
+qt5_copy_dll(${PROJECT_NAME} Core)
+qt5_copy_dll(${PROJECT_NAME} Gui)
+qt5_copy_dll(${PROJECT_NAME} Widgets)
+
+# GLAD
+set(GLAD_DIR "${LIB_DIR}/glad" CACHE PATH "Path containing src/glad.c")
+add_library(glad "${GLAD_DIR}/src/glad.c")
+target_include_directories(glad PRIVATE "${GLAD_DIR}/include")
+target_include_directories(${PROJECT_NAME} PRIVATE "${GLAD_DIR}/include")
+target_link_libraries(${PROJECT_NAME} glad "${CMAKE_DL_LIBS}")
+#target_link_libraries(${PROJECT_NAME} glad)
+ 
+# GLM 0.9.9.0
+set(GLM_DIR "${LIB_DIR}/glm-0.9.9.0/glm" CACHE PATH "Path containing glm/glm.hpp")
+include_directories(${GLM_DIR})
+#add_library("glm" "${GLM_DIR}/glm.hpp")
+#target_link_libraries(${PROJECT_NAME} "glm")
+
+# Stb Image Library
+# set(STBImage_DIR "${LIB_DIR}//stb_image" CACHE PATH "Path containing stb.h")
+# include_directories(${STBImage_DIR})
+
+# VTK
+set(VTK_DIR "${LIB_DIR}/VTK-8.1.1/build_x64_vs17" CACHE PATH "Path containing VTK")
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
+target_include_directories(${PROJECT_NAME} PRIVATE ${VTK_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} ${VTK_LIBRARIES})
+
+# OpenGL
+#find_package(OpenGL)
+#target_link_libraries(${PROJECT_NAME} OpenGL)
+target_link_libraries(${PROJECT_NAME} opengl32.lib)
+
+# Copy dll required for vtk - using OpenGLErrorMacros
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonCore-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkglew-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtksys-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+# Using vtkPLYReader
+file(COPY "${VTK_DIR}/bin/debug/vtkIOPLY-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonExecutionModel-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkIOCore-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonDataModel-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonMisc-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtklz4-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkzlib-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonSystem-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonTransforms-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonMath-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkRenderingOpenGL2-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkInteractionStyle-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkRenderingFreeType-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkRenderingCore-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkFiltersExtraction-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkFiltersSources-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkfreetype-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonColor-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkFiltersGeometry-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkFiltersGeneral-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkFiltersCore-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkCommonComputationalGeometry-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkFiltersStatistics-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkalglib-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkImagingFourier-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${VTK_DIR}/bin/debug/vtkImagingCore-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+# Using vtkDataPolyReader
+file(COPY "${VTK_DIR}/bin/debug/vtkIOLegacy-8.1.dll" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+
+
+# find_package(glm)
+
+#find_package(OpenGL REQUIRED)
+#target_link_libraries(${PROJECT_NAME} OpenGL)
+#target_link_libraries(${PROJECT_NAME} glm)
+
+
+############
+#Odds & Ends
+############
+
+#macro(qt5_copy_dll APP DLL)
+    ## find the release *.dll file
+    #get_target_property(Qt5_${DLL}Location Qt5::${DLL} LOCATION)
+    ## find the debug *d.dll file
+    #get_target_property(Qt5_${DLL}LocationDebug Qt5::${DLL} IMPORTED_LOCATION_DEBUG)
+
+    #add_custom_command(TARGET ${APP} POST_BUILD
+    #   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<$<CONFIG:Debug>:${Qt5_${DLL}LocationDebug}> $<$<NOT:$<CONFIG:Debug>>:${Qt5_${DLL}Location}> $<TARGET_FILE_DIR:${APP}>)
+#endmacro()
+
+
+
+
+
+

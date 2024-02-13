@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>CrosshairVertex.glsl</file>
+        <file>CrosshairFragment.glsl</file>
+    </qresource>
+</RCC>

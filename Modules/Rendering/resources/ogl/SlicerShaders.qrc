@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>SlicerVertex.glsl</file>
+        <file>SlicerFragment.glsl</file>
+    </qresource>
+</RCC>

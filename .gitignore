@@ -1,0 +1,5 @@
+.vscode
+CMakeLists.txt.user
+vcpkg_installed
+Modules/Rendering/src/config/rendering.configure.h
+Modules/Rendering/data/*

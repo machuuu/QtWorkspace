@@ -1,0 +1,3 @@
+#pragma once
+
+#cmakedefine OTSU_THRESHOLD_BUILD_SHARED
