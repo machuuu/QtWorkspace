@@ -73,8 +73,6 @@ find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(VTK CONFIG REQUIRED)
 
-message(MESSAGE " Found VTK Libraries: " "${VTK_LIBRARIES}")
-
 qt6_add_library(${OPENGL_RENDERING} STATIC
     # SOURCES
     src/ogl/AirwayRenderWidget.cpp
