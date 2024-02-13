@@ -11,8 +11,8 @@
             "displayName": "Configure preset using VS2022",
             "description": "Sets VS2022 generator, build and install directory",
             "generator": "Visual Studio 17 2022",
-            "binaryDir": "${sourceDir}/../myQtWorkspace.Build",
-            "installDir": "${sourceDir}/../myQtWorkspace.Install",
+            "binaryDir": "${sourceDir}/../${sourceDirName}.Build",
+            "installDir": "${sourceDir}/../${sourceDirName}.Install",
             "debug": {
                 "find": false
             },
