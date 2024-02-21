@@ -71,7 +71,7 @@ class AirwayRenderWidget : public QOpenGLWidget
 
 public:
     //explicit MainWidget(QWidget *parent = 0);
-	AirwayRenderWidget(QWidget *parent = 0);
+	AirwayRenderWidget(const std::string& filePath,QWidget *parent = 0);
     ~AirwayRenderWidget();
 
 protected:
@@ -97,6 +97,7 @@ private:
 	unsigned int shaderProgram; //Standard OpenGL
     
 	/* Geometry */
+	std::string airwayTreeFilepath;
 	AirwayTree *airwayTreeGeometry;
 
 	/* Texture */

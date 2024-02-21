@@ -59,7 +59,7 @@
 
 #include "rendering.configure.h"
 
-AirwayRenderWidget::AirwayRenderWidget(QWidget *parent /*= 0*/) :
+AirwayRenderWidget::AirwayRenderWidget(const std::string& filePath, QWidget *parent /*= 0*/):
 	textureID(0),
 	shaderProgram(0),
 	airwayTreeGeometry(0),
@@ -75,6 +75,10 @@ AirwayRenderWidget::AirwayRenderWidget(QWidget *parent /*= 0*/) :
 {
 	// Set focus such that keypresses and mouse clicks are registered in the main window
 	setFocusPolicy(Qt::StrongFocus);
+
+	// Set the filepath of the geometry
+	// TODO :: Validity check
+	airwayTreeFilepath = filePath;
 }
 
 AirwayRenderWidget::~AirwayRenderWidget()
@@ -107,8 +111,7 @@ void AirwayRenderWidget::initializeGL()
 	//! [2]
 	
 	initAirwayShaders();
-	std::string filePath(RENDERING_DATA_DIR "/ROIMT.ply");
-	airwayTreeGeometry = new AirwayTree(filePath);
+	airwayTreeGeometry = new AirwayTree(airwayTreeFilepath);
 	
 	camera.SetModelOffset(glm::vec3(2.0f, 55.0f, -150.0f)); // Around top of trachea
 	camera.UpRotation(-90.0f);  // rotation to match OpenGL Coordinate system

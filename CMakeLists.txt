@@ -19,5 +19,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #     "Single output directory for building all executables." )
 # ENDIF()
 
+option(QTWS_DEVELOPER "Developer Macro" OFF)
+set(QTWS_DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Data" CACHE PATH "Path to Data")
+
 add_subdirectory(Modules)
 add_subdirectory(Apps)

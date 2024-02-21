@@ -14,8 +14,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/configure.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/configure.h")
 set(PROJECT_SOURCES
     main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+    configure.h.in
+    configure.h
 )
 
 qt6_add_executable(${TARGET_NAME}

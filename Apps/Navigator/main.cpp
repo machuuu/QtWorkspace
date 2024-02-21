@@ -1,15 +1,15 @@
 #include <QApplication>
 #include "Logger.h"
-#include "AirwayRenderWidget.h"
+#include "mainwindow.h"
 
 int main(int argc, char** argv)
 {
 	QApplication a(argc, argv);
 	QString logFilePath = QCoreApplication::applicationDirPath() + "\\Application.log";
 	Logger::Initialize(logFilePath);
-	AirwayRenderWidget w;
-	w.resize(1920, 1080);
-	w.show();
+	MainWindow mw;
+	//mw.resize(1920, 1080);
+	mw.show();
 	Logger::Clean();
 	return a.exec();
 }

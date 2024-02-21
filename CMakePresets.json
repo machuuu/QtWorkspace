@@ -25,6 +25,16 @@
                 "value": "v143",
                 "strategy": "set"
             }
+        },
+        {
+            "name": "VS2022-Developer",
+            "cacheVariables": {
+                "QTWS_DEVELOPER" : {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            },
+            "inherits": ["VS2022"]
         }
     ]
 }

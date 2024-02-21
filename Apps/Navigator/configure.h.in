@@ -1,0 +1,7 @@
+#pragma once
+
+#cmakedefine QTWS_DEVELOPER
+
+#ifdef QTWS_DEVELOPER
+    #define QTWS_DATA_DIR "@QTWS_DATA_DIR@"
+#endif
