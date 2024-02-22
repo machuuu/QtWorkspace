@@ -68,7 +68,7 @@ void Crosshair::initGeometry(glm::vec2 center)
 
 void Crosshair::initShaders()
 {
-	m_ShaderProgram = mm::getShaderProgram(SHADER_DIR "/CrosshairVertex.glsl", SHADER_DIR "/CrosshairFragment.glsl");
+	m_ShaderProgram = mm::getShaderProgram(RENDERING_RESOURCES_DIR "/ogl/CrosshairVertex.glsl", RENDERING_RESOURCES_DIR "/ogl/CrosshairFragment.glsl");
 }
 
 void Crosshair::updatePosition(QVector2D mouseLocation, int screenWidth, int screenHeight)

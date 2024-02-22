@@ -92,8 +92,8 @@ void SagittalSlicerWidget::initializeGL()
 	m_SlicerBase = SlicerBase(m_CTData->getNumRows(), m_CTData->getNumSlices(), width(), height(), m_CTData);
 
 	m_SlicerBase.initializeTextures();
-	m_SlicerBase.initializeShader(SHADER_DIR "/SlicerVertex.glsl", SHADER_DIR "/SlicerFragment.glsl");
-	m_SlicerBase.initializeComputeShader(SHADER_DIR "/SagittalSliceCompute.glsl");
+	m_SlicerBase.initializeShader(RENDERING_RESOURCES_DIR "/ogl/SlicerVertex.glsl", RENDERING_RESOURCES_DIR "/ogl/SlicerFragment.glsl");
+	m_SlicerBase.initializeComputeShader(RENDERING_RESOURCES_DIR "/ogl/SagittalSliceCompute.glsl");
 	m_SlicerBase.initializeCrosshair();
 }
 
@@ -217,6 +217,6 @@ void SagittalSlicerWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void SagittalSlicerWidget::wheelEvent(QWheelEvent *e)
 {
-	m_SlicerBase.mouseOnWheel(e->delta());
+	m_SlicerBase.mouseOnWheel(e->angleDelta().y());
 	update();
 }

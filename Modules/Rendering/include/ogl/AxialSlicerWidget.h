@@ -2,7 +2,7 @@
 #define AXIALSLICERWIDGET_H
 
 #include "MainWindow.h"
-#include "config/configure.h"
+#include "rendering.configure.h"
 #include "CTVolume.h"
 #include "Camera6DoF.h"
 #include "mmUtilityTools.h"

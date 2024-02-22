@@ -2,7 +2,7 @@
 #define SAGITTALSLICERWIDGET_H
 
 #include "MainWindow.h"
-#include "config/configure.h"
+#include "rendering.configure.h"
 #include "CTVolume.h"
 #include "mmUtilityTools.h"
 #include "SlicerBase.h"

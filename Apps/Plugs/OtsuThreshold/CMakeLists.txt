@@ -5,11 +5,6 @@ set(TARGET_NAME_APP OstuThresholdApp)
 set(TARGET_FOLDER "Plugs")
 project(${TARGET_NAME} LANGUAGES CXX VERSION 1.0.0.0)
 
-# TODO : Organize the Qt files better instead of relying on generic AUTOUIC, AUTOMOC, AUTORCC and qt6_add_executable
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

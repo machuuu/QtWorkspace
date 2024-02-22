@@ -6,10 +6,6 @@ cmake_minimum_required(VERSION 3.22.0)
 
 set(TARGET_FOLDER "Modules")
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -73,23 +69,76 @@ find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(VTK CONFIG REQUIRED)
 
-qt6_add_library(${OPENGL_RENDERING} STATIC
-    # SOURCES
+set(PRIVATE_SOURCES
     src/ogl/AirwayRenderWidget.cpp
     src/ogl/AirwayTreeEngine.cpp
     src/ogl/Camera6DoF.cpp
 
     src/config/rendering.configure.h.in
     src/config/rendering.configure.h
-    
-    # RESOURCES
 
-    # PUBLIC HEADERS
+    src/ogl/mmUtilityTools.cpp
+
+    src/ogl/CTVolume.cpp
+    src/ogl/Crosshair.cpp
+    src/ogl/SlicerCamera.cpp
+    src/ogl/SlicerBase.cpp
+    src/ogl/AxialSlicerWidget.cpp
+    src/ogl/CoronalSlicerWidget.cpp
+    src/ogl/SagittalSlicerWidget.cpp
+    src/ogl/SlicerDisplay.cpp
+)
+
+set(PUBLIC_HEADERS
     include/ogl/AirwayRenderWidget.h
     include/ogl/AirwayTreeEngine.h
     include/ogl/Camera6DoF.h
     include/ogl/mmOpenGLErrorCheck.h
     include/ogl/mmUtilityTools.h
+    include/ogl/CTVolume.h
+    include/ogl/Crosshair.h
+    include/ogl/SlicerCamera.h
+    include/ogl/SlicerBase.h
+    include/ogl/AxialSlicerWidget.h
+    include/ogl/CoronalSlicerWidget.h
+    include/ogl/SagittalSlicerWidget.h
+    include/ogl/SlicerDisplay.h
+)
+
+set(GLSL_RESOURECS 
+    resources/ogl/AirwayFragmentShader.glsl
+    resources/ogl/AirwayVertexShader.glsl
+    resources/ogl/AxialSlabCompute.glsl
+    resources/ogl/AxialSliceCompute.glsl
+    resources/ogl/CoronalSliceCompute.glsl
+    resources/ogl/CrosshairFragment.glsl
+    resources/ogl/CrosshairVertex.glsl
+    resources/ogl/ObliqueSliceCompute.glsl
+    resources/ogl/SagittalSliceCompute.glsl
+    resources/ogl/SlicerFragment.glsl
+    resources/ogl/SlicerVertex.glsl
+)
+
+set(QRC_RESOURCES
+    resources/ogl/AirwayShaders.qrc
+    resources/ogl/ComputeShaders.qrc
+    resources/ogl/SlicerShaders.qrc
+    resources/ogl/CrosshairShaders.qrc
+)
+
+source_group("QRC" FILES ${QRC_RESOURCES})
+source_group("Shaders" FILES ${GLSL_RESOURECS})
+
+qt6_add_library(${OPENGL_RENDERING} STATIC
+    # SOURCES
+    ${PRIVATE_SOURCES}
+    
+    # RESOURCES
+    ${QRC_RESOURCES}
+    ${GLSL_RESOURECS}
+
+    # PUBLIC SOURCES
+    ${PUBLIC_HEADERS}
 )
 
 # Organize target into a group in Visual Studio IDE
