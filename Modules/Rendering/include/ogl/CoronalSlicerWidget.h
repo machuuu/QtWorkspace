@@ -2,7 +2,6 @@
 #define CORONALSLICERWIDGET_H
 
 #include "MainWindow.h"
-#include "rendering.configure.h"
 #include "CTVolume.h"
 #include "mmUtilityTools.h"
 #include "SlicerBase.h"

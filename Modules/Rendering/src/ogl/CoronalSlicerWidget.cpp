@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 
+#include "rendering.configure.h"
+
 CoronalSlicerWidget::CoronalSlicerWidget(CTVolume *CTData, MainWindow *mw) :
 	m_MainWindow(mw),
 	m_CTData(CTData),

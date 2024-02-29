@@ -6,7 +6,6 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	m_arWidth(width),
 	m_arHeight(height)
 {
-	
 	m_MainLayout = new QGridLayout(this);
 	m_MainLayout->setContentsMargins(0, 0, 0, 0);
 	
@@ -77,10 +76,6 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	QObject::connect(slicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), this, SLOT(updateVoxelInfo(QVector4D)));
 }
 
-SlicerDisplay::SlicerDisplay()
-{
-
-}
 
 SlicerDisplay::~SlicerDisplay()
 {

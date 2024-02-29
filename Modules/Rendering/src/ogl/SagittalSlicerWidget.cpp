@@ -6,7 +6,7 @@
 #include <string>
 #include <sstream>
 
-
+#include "rendering.configure.h"
 
 SagittalSlicerWidget::SagittalSlicerWidget(CTVolume *CTData, MainWindow *mw) :
 	m_MainWindow(mw),

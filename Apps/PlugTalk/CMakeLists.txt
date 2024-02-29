@@ -9,12 +9,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+set(PROJECT_UI_SOURCES
+    mainwindow.ui
 )
+set(PROJECT_SOURCES
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    ${PROJECT_UI_SOURCES}
+)
+
+source_group("UI" FILES ${PROJECT_UI_SOURCES})
 
 qt6_add_executable(${TARGET_NAME}
     ${PROJECT_SOURCES}

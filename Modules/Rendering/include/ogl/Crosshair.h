@@ -2,7 +2,6 @@
 #define CROSSHAIR_H
 
 #include "glad/glad.h"
-#include "rendering.configure.h"
 #include "mmOpenGLErrorCheck.h"
 #include <vector>
 #include <iostream>

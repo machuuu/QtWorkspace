@@ -71,7 +71,8 @@ AirwayRenderWidget::AirwayRenderWidget(const std::string& filePath, QWidget *par
 	qPressed(0),
 	ePressed(0),
 	mouseLeftClick(0),
-	mouseRightClick(0)
+	mouseRightClick(0),
+	QOpenGLWidget(parent)
 {
 	// Set focus such that keypresses and mouse clicks are registered in the main window
 	setFocusPolicy(Qt::StrongFocus);

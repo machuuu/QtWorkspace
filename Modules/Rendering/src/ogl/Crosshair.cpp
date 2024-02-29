@@ -1,5 +1,5 @@
 #include "Crosshair.h"
-
+#include "rendering.configure.h"
 
 Crosshair::Crosshair()
 {

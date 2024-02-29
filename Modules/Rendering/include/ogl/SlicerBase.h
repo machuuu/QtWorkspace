@@ -1,7 +1,6 @@
 #ifndef SLICERBASE_H
 #define SLICERBASE_H
 
-#include "rendering.configure.h"
 #include "CTVolume.h"
 #include "Camera6DoF.h"
 #include <SlicerCamera.h>

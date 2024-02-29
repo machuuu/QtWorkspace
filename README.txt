@@ -7,7 +7,8 @@ Requirements:
 1. Installation of VCPKG with $env:VCPKG_ROOT configured for CMake. (Eventually to support Qt6 requirements)
     1. See CMakePresets.json for specify the VCPKG toolchain file
 3. Installation of Qt6 (6.4.2)
-    1. See CMake/SetupLibraries 
+    1. See CMake/SetupLibraries
+1. Windows OS
 
 This repository is used for me to learn Qt for application development using the following concepts:
 1. Vulkan Rendering

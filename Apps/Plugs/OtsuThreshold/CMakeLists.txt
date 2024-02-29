@@ -9,14 +9,18 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Charts)
-
+set(PROJECT_UI_SOURCES
+    otsuthreshold.ui
+)
 set(PROJECT_SOURCES
     otsuthreshold.cpp
     otsuthreshold.h
-    otsuthreshold.ui
+    ${PROJECT_UI_SOURCES}
     OtsuThresholdExport.h
     OtsuThresholdConfig.h.in
 )
+
+source_group("UI" FILES ${PROJECT_UI_SOURCES})
 
 set(LIB_TYPE SHARED)
 if (${LIB_TYPE} STREQUAL "SHARED") 

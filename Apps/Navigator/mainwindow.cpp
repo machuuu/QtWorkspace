@@ -16,6 +16,14 @@
 
 #include "configure.h"
 
+#include <filesystem>
+
+#include "CTVolume.h"
+#include "AxialSlicerWidget.h"
+#include "CoronalSlicerWidget.h"
+#include "SagittalSlicerWidget.h"
+#include "SlicerDisplay.h"
+
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 	, ui(new Ui::MainWindow)
@@ -24,27 +32,15 @@ MainWindow::MainWindow(QWidget* parent)
 	connect(ui->actionOpenAirwaySurface, &QAction::triggered, this, &MainWindow::dialogAirwaySurface);
 	connect(ui->actionOpenAnalyzeImage, &QAction::triggered, this, &MainWindow::dialogAnalyzeImage);
 
-	if (loadAirwaySurfaceButton != nullptr) { delete loadAirwaySurfaceButton; loadAirwaySurfaceButton = nullptr; }
-	loadAirwaySurfaceButton = new QPushButton("Load Airway Surface");
-	//loadAirwaySurfaceButton->setFixedSize(150, 30);
-	connect(loadAirwaySurfaceButton, &QPushButton::clicked, this, &MainWindow::dialogAirwaySurface);
+	connect(ui->pushButtonAirwaySurface, &QPushButton::clicked, this, &MainWindow::dialogAirwaySurface);
+	connect(ui->pushButtonAnalyzeImage, &QPushButton::clicked, this, &MainWindow::dialogAnalyzeImage);
 
-	if (loadAnalyzeImageButton != nullptr) { delete loadAnalyzeImageButton; loadAnalyzeImageButton = nullptr; }
-	loadAnalyzeImageButton = new QPushButton("Load Analyze Image");
-	//loadAnalyzeImageButton->setFixedSize(150, 30);
-	connect(loadAnalyzeImageButton, &QPushButton::clicked, this, &MainWindow::dialogAnalyzeImage);
-
-	if (mainGridLayout != nullptr) { delete mainGridLayout; mainGridLayout = nullptr; }
-
-	mainGridLayout = new QGridLayout();
-	mainGridLayout->addWidget(loadAirwaySurfaceButton, 0, 0);
-	mainGridLayout->addWidget(loadAnalyzeImageButton, 1, 0);
-
-	ui->centralwidget->setLayout(mainGridLayout);
+	ui->airwaySurfaceWidget->hide();
+	ui->analyzeImageWidget->hide();
 
 #ifdef QTWS_DEVELOPER
-	loadAirwaySurface(QTWS_DATA_DIR "/ROIMT.ply");
-	loadAnalzeImage(QTWS_DEVELOPER "/test.hdr");
+	loadAirwaySurface(QTWS_DATA_DIR "/1.3.12.2.1107.5.1.4.67126.30000018101712091196200008839_blendedpolygons.ply");
+	loadAnalzeImage(QTWS_DATA_DIR "/1.3.12.2.1107.5.1.4.67126.30000018101712091196200008839_analyze.hdr");
 #endif
 }
 
@@ -80,34 +76,55 @@ void MainWindow::loadAirwaySurface(const std::string& filepath)
 {
 	if (!filepath.empty())
 	{
-		if (airwayRenderWidget != nullptr) { delete airwayRenderWidget; airwayRenderWidget = nullptr; }
+		auto airwayRenderWidget = new AirwayRenderWidget(filepath);
+		airwayRenderWidget->setMinimumSize(300, 300);
+		airwayRenderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-		airwayRenderWidget = new AirwayRenderWidget(filepath);
+		QHBoxLayout* hLayout = new QHBoxLayout();
+		hLayout->addWidget(airwayRenderWidget);
 
-		mainGridLayout->removeWidget(loadAirwaySurfaceButton);
-		loadAirwaySurfaceButton->setParent(nullptr); // Keep button for later ... 
-		mainGridLayout->addWidget(airwayRenderWidget, 0, 0);
+		ui->airwaySurfaceWidget->setLayout(hLayout);
+
+		ui->loadAirwaySurfaceWidget->hide();
+		ui->airwaySurfaceWidget->show();
 	}
 }
 
-void MainWindow::loadAnalzeImage(const std::string& filepath)
+void MainWindow::loadAnalzeImage(const std::string& headerFilePath)
 {
+	if (!headerFilePath.empty())
+	{
+		if (ctVolume != nullptr) { delete ctVolume; ctVolume = nullptr; }
 
+		std::filesystem::path imageFilePath(headerFilePath);
+		imageFilePath.replace_extension(".img");
+		ctVolume = new CTVolume(headerFilePath, imageFilePath.string());
+
+		auto axialSlicerWidget = new AxialSlicerWidget(ctVolume);
+		auto coronalSlicerWidget = new CoronalSlicerWidget(ctVolume);
+		auto sagittalSlicerWidget = new SagittalSlicerWidget(ctVolume);
+
+		auto axialSlicerDisplay = new SlicerDisplay(axialSlicerWidget, 300, (300 / ctVolume->getAxialAspectRatio()));
+		auto coronalSlicerDisplay = new SlicerDisplay(coronalSlicerWidget, 300, (300 / ctVolume->getCoronalAspectRatio()));
+		auto sagittalSlicerDisplay = new SlicerDisplay(sagittalSlicerWidget, 300, (300 / ctVolume->getSagittalAspectRatio()));
+
+		QGridLayout* gridLayout = new QGridLayout();
+		gridLayout->addWidget(axialSlicerDisplay, 0, 0);
+		gridLayout->addWidget(coronalSlicerDisplay, 0, 1);
+		gridLayout->addWidget(sagittalSlicerDisplay, 0, 2);
+		gridLayout->setColumnStretch(0, 1);
+		gridLayout->setColumnStretch(1, 1);
+		gridLayout->setColumnStretch(2, 1);
+		ui->analyzeImageWidget->setLayout(gridLayout);
+
+		ui->loadAnalyzeImageWidge->hide();
+		ui->analyzeImageWidget->show();
+	}
 }
 
 MainWindow::~MainWindow() 
 {
-
-	// todo :: what is the proper order of cleaning up? 
-	// if another application uses this window, would like to ensure all resources are cleared
-	// currently, doesn't really matter because when this is closed, the app will close.
-
     delete ui;
-
-	if (loadAirwaySurfaceButton != nullptr) { delete loadAirwaySurfaceButton; loadAirwaySurfaceButton = nullptr; }
-	if (loadAnalyzeImageButton != nullptr) { delete loadAnalyzeImageButton; loadAnalyzeImageButton = nullptr; }
-
-	if (airwayRenderWidget != nullptr) { delete airwayRenderWidget; airwayRenderWidget = nullptr; }
-
-	if (mainGridLayout != nullptr) { delete mainGridLayout; mainGridLayout = nullptr; }
+	if (ctVolume != nullptr) { delete ctVolume; ctVolume = nullptr; }
+	// Qt's QObject parent/child will clean up resources
 }

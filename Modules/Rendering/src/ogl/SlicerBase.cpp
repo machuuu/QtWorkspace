@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "rendering.configure.h"
+
 SlicerBase::SlicerBase(int slicerXDim, int slicerYDim, int slicerWidth, int slicerHeight, CTVolume *CTData) :
 	m_XVoxels(slicerXDim),
 	m_YVoxels(slicerYDim),

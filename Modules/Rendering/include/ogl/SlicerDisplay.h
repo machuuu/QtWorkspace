@@ -17,7 +17,7 @@ class SlicerDisplay : public QWidget
 	Q_OBJECT
 
 public:
-	SlicerDisplay();
+	SlicerDisplay() = delete;
 	SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float height);
 	~SlicerDisplay();
 	void resizeEvent(QResizeEvent *e);
@@ -41,14 +41,12 @@ private:
 	QLabel *m_zLabel;
 	QLabel *m_zLabelValue;
 	QLabel *m_huLabel;
-	QLabel *m_huLabelValue;
-	
+	QLabel *m_huLabelValue;	
 	
 	int m_xVoxel;
 	int m_yVoxel;
 	int m_zVoxel;
 	int m_HUValue;
-
 };
 
 #endif //SLICERMAIN_H

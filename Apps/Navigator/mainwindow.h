@@ -9,6 +9,11 @@ class AirwayRenderWidget;
 class QGridLayout;
 class QLabel;
 class QPushButton;
+class AxialSlicerWidget;
+class CoronalSlicerWidget;
+class SagittalSlicerWidget;
+class SlicerDisplay;
+class CTVolume;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -42,17 +47,7 @@ private:
     void loadAnalzeImage(const std::string& filepath);
 
     Ui::MainWindow *ui;
-
-    // Load Data Labels
-    //QLabel* loadAirwayLabel = nullptr;
-    //QLabel* loadCTLabel = nullptr;
-
-    QGridLayout* mainGridLayout = nullptr;
-
-    QPushButton* loadAirwaySurfaceButton = nullptr;
-    QPushButton* loadAnalyzeImageButton = nullptr;
-
-    AirwayRenderWidget* airwayRenderWidget = nullptr;    
+    CTVolume* ctVolume = nullptr;
 
 };
 #endif // MAINWINDOW_H
