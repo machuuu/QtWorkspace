@@ -106,6 +106,15 @@ void MainWindow::loadAnalzeImage(const std::string& headerFilePath)
 		auto coronalSlicerWidget = new CoronalSlicerWidget(ctVolume);
 		auto sagittalSlicerWidget = new SagittalSlicerWidget(ctVolume);
 
+		QObject::connect(axialSlicerWidget, SIGNAL(axialSliceSelect(QVector2D)), sagittalSlicerWidget, SLOT(axialChangeSlice(QVector2D)));
+		QObject::connect(axialSlicerWidget, SIGNAL(axialSliceSelect(QVector2D)), coronalSlicerWidget, SLOT(axialChangeSlice(QVector2D)));
+
+		QObject::connect(coronalSlicerWidget, SIGNAL(coronalSliceSelect(QVector2D)), sagittalSlicerWidget, SLOT(coronalChangeSlice(QVector2D)));
+		QObject::connect(coronalSlicerWidget, SIGNAL(coronalSliceSelect(QVector2D)), axialSlicerWidget, SLOT(coronalChangeSlice(QVector2D)));
+
+		QObject::connect(sagittalSlicerWidget, SIGNAL(sagittalSliceSelect(QVector2D)), coronalSlicerWidget, SLOT(sagittalChangeSlice(QVector2D)));
+		QObject::connect(sagittalSlicerWidget, SIGNAL(sagittalSliceSelect(QVector2D)), axialSlicerWidget, SLOT(sagittalChangeSlice(QVector2D)));
+
 		auto axialSlicerDisplay = new SlicerDisplay(axialSlicerWidget, 300, (300 / ctVolume->getAxialAspectRatio()));
 		axialSlicerDisplay->setMinimumHeight(300);
 		auto coronalSlicerDisplay = new SlicerDisplay(coronalSlicerWidget, 300, (300 / ctVolume->getCoronalAspectRatio()));
