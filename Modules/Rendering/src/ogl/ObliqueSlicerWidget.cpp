@@ -1,4 +1,5 @@
 #include "ObliqueSlicerWidget.h"
+#include "rendering.configure.h"
 
 ObliqueSlicerWidget::ObliqueSlicerWidget(CTVolume *CTData, MainWindow *mw) :
 	m_MainWindow(mw),
@@ -30,9 +31,7 @@ void ObliqueSlicerWidget::initializeGL()
 	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
-	m_SlicerBase = ObliqueSlicerBase(m_CTData->getNumColumns(), m_CTData->getNumRows(), m_CTData->getNumSlices(), width(), height(), m_CTData);
-
-
+	m_ObliqueSlicerBase.initialize(m_CTData->getNumColumns(), m_CTData->getNumRows(), m_CTData->getNumSlices(), width(), height(), m_CTData);
 	
 	GLint maxWorkGroupInvo;
 	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &maxWorkGroupInvo);
@@ -51,26 +50,26 @@ void ObliqueSlicerWidget::initializeGL()
 	std::cout << "GL_MAX_COMPUTE_WORK_GROUP_SIZE " << maxComputeWorkGroupSize[0] << " " << maxComputeWorkGroupSize[1] << " " << maxComputeWorkGroupSize[2] << std::endl;
 
 
-	m_SlicerBase.initializeTextures();
-	m_SlicerBase.initializeShader(SHADER_DIR "/SlicerVertex.glsl", SHADER_DIR "/SlicerFragment.glsl");
-	m_SlicerBase.initializeComputeShader(SHADER_DIR "/ObliqueSliceCompute.glsl");
-	m_SlicerBase.initializeCrosshair();
+	m_ObliqueSlicerBase.initializeTextures();
+	m_ObliqueSlicerBase.initializeShader(RENDERING_RESOURCES_DIR "/ogl/SlicerVertex.glsl", RENDERING_RESOURCES_DIR "/ogl/SlicerFragment.glsl");
+	m_ObliqueSlicerBase.initializeComputeShader(RENDERING_RESOURCES_DIR "/ogl/ObliqueSliceCompute.glsl");
+	m_ObliqueSlicerBase.initializeCrosshair();
 }
 
 void ObliqueSlicerWidget::resizeGL(int w, int h)
 {
-	m_SlicerBase.updateSlicerDimensions(w, h);
+	m_ObliqueSlicerBase.updateSlicerDimensions(w, h);
 }
 
 void ObliqueSlicerWidget::paintGL()
 {
 	//m_SlicerBase.updateSliceSelect(0);
-	m_SlicerBase.draw(SlicerBase::OBLIQUE);
+	m_ObliqueSlicerBase.draw(SlicerBase::OBLIQUE);
 }
 
 void ObliqueSlicerWidget::mousePressEvent(QMouseEvent *e)
 {
-	m_SlicerBase.mouseOnClick(QVector2D(e->pos()), e->button());
+	m_ObliqueSlicerBase.mouseOnClick(QVector2D(e->pos()), e->button());
 
 	// TODO: Add support so that SlicerBase sends the Signal rather than getting from Base and sending through sendSliceSelect
 	// TODO: Add support so that SlicerBase see's OpenGL resources when it contains the Crosshair - Otherwise SlicerBase's vertex array and vertex buffer are the same ID as the crosshair vertex array and buffer
@@ -82,7 +81,7 @@ void ObliqueSlicerWidget::mousePressEvent(QMouseEvent *e)
 	case Qt::RightButton:
 		m_MouseRightClick = true;
 		//m_Crosshair.updatePosition(QVector2D(e->pos()), width(), height());
-		m_SlicerBase.cursorOn();
+		m_ObliqueSlicerBase.cursorOn();
 		//sendSliceSelect(m_SlicerBase.getSlicesToSend());
 		break;
 	default:
@@ -101,13 +100,13 @@ void ObliqueSlicerWidget::mouseMoveEvent(QMouseEvent *e)
 	// Using mouse flags allows the other slices to be updated in real time.
 	if (m_MouseLeftClick)
 	{
-		m_SlicerBase.mouseOnMove(QVector2D(e->pos()));
+		m_ObliqueSlicerBase.mouseOnMove(QVector2D(e->pos()));
 	}
 	else if (m_MouseRightClick)
 	{
 		//m_Crosshair.updatePosition(QVector2D(e->pos()), width(), height());
 		//sendSliceSelect(m_SlicerBase.getSlicesToSend());
-		m_SlicerBase.mouseOnMove(QVector2D(e->pos()));
+		m_ObliqueSlicerBase.mouseOnMove(QVector2D(e->pos()));
 	}
 	else
 	{
@@ -118,7 +117,7 @@ void ObliqueSlicerWidget::mouseMoveEvent(QMouseEvent *e)
 
 void ObliqueSlicerWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-	m_SlicerBase.mouseOnRelease();
+	m_ObliqueSlicerBase.mouseOnRelease();
 	m_MouseLeftClick = false;
 	m_MouseRightClick = false;
 	update();
@@ -126,13 +125,13 @@ void ObliqueSlicerWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void ObliqueSlicerWidget::wheelEvent(QWheelEvent *e)
 {
-	m_SlicerBase.mouseOnWheel(e->delta());
+	m_ObliqueSlicerBase.mouseOnWheel(e->angleDelta().y());
 	update();
 }
 
 void ObliqueSlicerWidget::keyPressEvent(QKeyEvent *e)
 {
-	m_SlicerBase.keyOnPress(e->key());
+	m_ObliqueSlicerBase.keyOnPress(e->key());
 
 	switch (e->key())
 	{
@@ -153,7 +152,7 @@ void ObliqueSlicerWidget::keyPressEvent(QKeyEvent *e)
 
 void ObliqueSlicerWidget::keyReleaseEvent(QKeyEvent *e)
 {
-	m_SlicerBase.keyOnRelease(e->key());
+	m_ObliqueSlicerBase.keyOnRelease(e->key());
 	
 	switch (e->key())
 	{

@@ -1,20 +1,8 @@
 #include "ObliqueSlicerBase.h"
 
-ObliqueSlicerBase::ObliqueSlicerBase(int slicerXDim, int slicerYDim, int slicerZDim, int slicerWidth, int slicerHeight, CTVolume *CTData) :
-	m_ZVoxels(slicerZDim),
-	m_TextureWidth(1024),
-	m_TextureHeight(1024),
-	SlicerBase(slicerXDim, slicerYDim, slicerWidth, slicerHeight, CTData)
+ObliqueSlicerBase::ObliqueSlicerBase(int slicerXDim, int slicerYDim, int slicerZDim, int slicerWidth, int slicerHeight, CTVolume *CTData)
 {
-	m_Camera.SetModelOffset(glm::vec3(m_XVoxels/2.0, m_YVoxels / 2.0, m_ZVoxels / 2.0));
-	m_Camera.SetKeyboardMovementSpeed(25.0f);
-	m_SlicerBounds = glm::ivec2(m_TextureWidth,m_TextureHeight);
-	m_CTVolumeBounds = glm::ivec3(m_XVoxels, m_YVoxels, m_ZVoxels);
-
-	m_SlicerVoxelInMillimeters = glm::vec2(m_CTData->getXDelta(), m_CTData->getYDelta());
-	m_CTVolumeVoxelInMillimeters = glm::vec3(m_CTData->getXDelta(), m_CTData->getYDelta(), m_CTData->getZDelta());
-
-	m_AspectRatio = glm::vec3(m_CTData->getVolumePhysicalDims().x / m_CTData->getVolumePhysicalDims().x, m_CTData->getVolumePhysicalDims().y / m_CTData->getVolumePhysicalDims().x, m_CTData->getVolumePhysicalDims().z / m_CTData->getVolumePhysicalDims().x);
+	initialize(slicerXDim, slicerYDim, slicerZDim, slicerWidth, slicerHeight, CTData);
 }
 
 ObliqueSlicerBase::ObliqueSlicerBase()
@@ -31,6 +19,25 @@ ObliqueSlicerBase::~ObliqueSlicerBase()
 	//glDeleteVertexArrays(1, &m_VertexArray);
 	//glDeleteBuffers(1, &m_VertexBuffer);
 	//glDeleteBuffers(1, &m_IndexBuffer);
+}
+
+void ObliqueSlicerBase::initialize(int slicerXDim, int slicerYDim, int sliceZDim, int slicerWidth, int slicerHeight, CTVolume* CTData)
+{
+	SlicerBase::initialize(slicerXDim, slicerYDim, slicerWidth, slicerHeight, CTData);
+	
+	m_ZVoxels = sliceZDim;
+	m_TextureWidth = 1024;
+	m_TextureHeight = 1024;
+	
+	m_Camera.SetModelOffset(glm::vec3(m_XVoxels / 2.0, m_YVoxels / 2.0, m_ZVoxels / 2.0));
+	m_Camera.SetKeyboardMovementSpeed(25.0f);
+	m_SlicerBounds = glm::ivec2(m_TextureWidth, m_TextureHeight);
+	m_CTVolumeBounds = glm::ivec3(m_XVoxels, m_YVoxels, m_ZVoxels);
+
+	m_SlicerVoxelInMillimeters = glm::vec2(m_CTData->getXDelta(), m_CTData->getYDelta());
+	m_CTVolumeVoxelInMillimeters = glm::vec3(m_CTData->getXDelta(), m_CTData->getYDelta(), m_CTData->getZDelta());
+
+	m_AspectRatio = glm::vec3(m_CTData->getVolumePhysicalDims().x / m_CTData->getVolumePhysicalDims().x, m_CTData->getVolumePhysicalDims().y / m_CTData->getVolumePhysicalDims().x, m_CTData->getVolumePhysicalDims().z / m_CTData->getVolumePhysicalDims().x);
 }
 
 void ObliqueSlicerBase::draw(SlicerSelect select)

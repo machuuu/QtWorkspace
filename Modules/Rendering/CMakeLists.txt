@@ -87,6 +87,9 @@ set(PRIVATE_SOURCES
     src/ogl/CoronalSlicerWidget.cpp
     src/ogl/SagittalSlicerWidget.cpp
     src/ogl/SlicerDisplay.cpp
+
+    src/ogl/ObliqueSlicerBase.cpp
+    src/ogl/ObliqueSlicerWidget.cpp
 )
 
 set(PUBLIC_HEADERS
@@ -103,6 +106,8 @@ set(PUBLIC_HEADERS
     include/ogl/CoronalSlicerWidget.h
     include/ogl/SagittalSlicerWidget.h
     include/ogl/SlicerDisplay.h
+    include/ogl/ObliqueSlicerBase.h
+    include/ogl/ObliqueSlicerWidget.h
 )
 
 set(GLSL_RESOURECS 

@@ -60,7 +60,7 @@ public:
 	SlicerBase& operator=(SlicerBase&&) = delete;
 
 	/* Initializations */
-	void initialize(int slicerXDim, int slicerYDim, int slicerWidth, int slicerHeight, CTVolume* CTData);
+	virtual void initialize(int slicerXDim, int slicerYDim, int slicerWidth, int slicerHeight, CTVolume* CTData);
 	virtual void initializeTextures();
 	void initializeShader(const char* vertexPath, const char* fragmentPath);
 	void initializeComputeShader(const char* computePath);

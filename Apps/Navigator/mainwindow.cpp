@@ -23,6 +23,7 @@
 #include "CoronalSlicerWidget.h"
 #include "SagittalSlicerWidget.h"
 #include "SlicerDisplay.h"
+#include "ObliqueSlicerWidget.h"
 
 #include "Logger.h"
 
@@ -79,13 +80,14 @@ void MainWindow::loadAirwaySurface(const std::string& filepath)
 	if (!filepath.empty())
 	{
 		auto airwayRenderWidget = new AirwayRenderWidget(filepath);
-		airwayRenderWidget->setMinimumHeight(300);
+		//airwayRenderWidget->setMinimumHeight(300);
 		airwayRenderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 		QHBoxLayout* hLayout = new QHBoxLayout();
 		hLayout->addWidget(airwayRenderWidget);
 
 		ui->airwaySurfaceWidget->setLayout(hLayout);
+		//ui->airwaySurfaceWidget->setMinimumHeight(300);
 
 		ui->loadAirwaySurfaceWidget->hide();
 		ui->airwaySurfaceWidget->show();
@@ -116,20 +118,30 @@ void MainWindow::loadAnalzeImage(const std::string& headerFilePath)
 		QObject::connect(sagittalSlicerWidget, SIGNAL(sagittalSliceSelect(QVector2D)), axialSlicerWidget, SLOT(sagittalChangeSlice(QVector2D)));
 
 		auto axialSlicerDisplay = new SlicerDisplay(axialSlicerWidget, 300, (300 / ctVolume->getAxialAspectRatio()));
-		axialSlicerDisplay->setMinimumHeight(300);
+		//axialSlicerDisplay->setMinimumHeight(250);
+		axialSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		auto coronalSlicerDisplay = new SlicerDisplay(coronalSlicerWidget, 300, (300 / ctVolume->getCoronalAspectRatio()));
-		coronalSlicerDisplay->setMinimumHeight(300);
+		//coronalSlicerDisplay->setMinimumHeight(250);
+		coronalSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		auto sagittalSlicerDisplay = new SlicerDisplay(sagittalSlicerWidget, 300, (300 / ctVolume->getSagittalAspectRatio()));
-		sagittalSlicerDisplay->setMinimumHeight(300);
+		//sagittalSlicerDisplay->setMinimumHeight(250);
+		sagittalSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+		auto obliqueSlicerWidget = new ObliqueSlicerWidget(ctVolume);
+		auto obliqueSlicerDisplay = new SlicerDisplay(obliqueSlicerWidget, 300, 300);
+		obliqueSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+		//obliqueSlicerDisplay->setMinimumHeight(250);
 
 		QGridLayout* gridLayout = new QGridLayout();
 		gridLayout->addWidget(axialSlicerDisplay, 0, 0);
 		gridLayout->addWidget(coronalSlicerDisplay, 0, 1);
 		gridLayout->addWidget(sagittalSlicerDisplay, 0, 2);
+		gridLayout->addWidget(obliqueSlicerDisplay, 1, 1);
 		gridLayout->setColumnStretch(0, 1);
 		gridLayout->setColumnStretch(1, 1);
 		gridLayout->setColumnStretch(2, 1);
 		ui->analyzeImageWidget->setLayout(gridLayout);
+		//ui->analyzeImageWidget->setMinimumHeight(600);
 
 		ui->loadAnalyzeImageWidge->hide();
 		ui->analyzeImageWidget->show();

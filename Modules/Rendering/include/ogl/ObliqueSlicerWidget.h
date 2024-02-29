@@ -2,7 +2,6 @@
 #define OBLIQUESLICERWIDGET_H
 
 #include "MainWindow.h"
-#include "config/configure.h"
 #include "CTVolume.h"
 #include "Camera6DoF.h"
 #include "mmUtilityTools.h"
@@ -47,7 +46,7 @@ private:
 	bool m_MouseRightClick;
 
 	// SlicerBase
-	ObliqueSlicerBase m_SlicerBase;
+	ObliqueSlicerBase m_ObliqueSlicerBase;
 };
 
 
