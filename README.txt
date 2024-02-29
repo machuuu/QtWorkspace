@@ -22,6 +22,7 @@ This repository is used for me to learn Qt for application development using the
 
 I chose to use Qt because I can learn how to apply each concept to multiple platforms. 
 Finally, it encourages me to become more proficient in CMake to handle the build system for each platform.
+    1. Note: At the moment I am only focusing on Windows OS. 
 
 Tasks:
 1. Implement dynamic load of Otsu Threshold plugin for PlugTalk application.
@@ -31,4 +32,5 @@ Tasks:
 1. Figure out what Networking task to implement in the Networking project.
     1. Online photo gallary with each client controlling a camera to view a wall of custom photos.
 1. Migrate my existing OpenGL rendering
+    1. Properly forward declare the class definitions and define an public / private interface
 1. Create Install CMake Target for a Module with the VCPKG tool to help bundle dependencies
