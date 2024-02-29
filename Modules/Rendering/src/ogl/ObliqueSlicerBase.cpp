@@ -141,6 +141,19 @@ void ObliqueSlicerBase::createSliceTexture()
 	mmOpenGLCheckErrorMacro("Error with initializing blank texture - OpenGL");
 }
 
+void ObliqueSlicerBase::setOrbitCenter(int xVox, int yVox, int zVox)
+{
+	m_Camera.SetModelOffset(glm::vec3(xVox, yVox, zVox));
+}
+
+void ObliqueSlicerBase::getOrbitCenter(int& xVox, int& yVox, int& zVox)
+{
+	auto offset = m_Camera.GetModelOffset();
+	xVox = round(offset.x);
+	yVox = round(offset.y);
+	zVox = round(offset.z);
+}
+
 void ObliqueSlicerBase::mouseOnMove(QVector2D mousePosition)
 {
 	float xoffset = mousePosition.x() - m_MouseLastPosition.x();

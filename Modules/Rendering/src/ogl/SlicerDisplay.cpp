@@ -31,7 +31,7 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	m_xLabel->setFixedHeight(textHeight);
 
 	m_xLabelValue = new QLabel();
-	m_xLabelValue->setNum(m_xVoxel);
+	m_xLabelValue->setText("");
 	m_xLabelValue->setFixedHeight(textHeight);
 
 	m_yLabel = new QLabel();
@@ -39,7 +39,7 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	m_yLabel->setFixedHeight(textHeight);
 
 	m_yLabelValue = new QLabel();
-	m_yLabelValue->setNum(m_yVoxel);
+	m_yLabelValue->setText("");
 	m_yLabelValue->setFixedHeight(textHeight);
 
 	m_zLabel = new QLabel();
@@ -47,7 +47,7 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	m_zLabel->setFixedHeight(textHeight);
 
 	m_zLabelValue = new QLabel();
-	m_zLabelValue->setNum(m_zVoxel);
+	m_zLabelValue->setText("");
 	m_zLabelValue->setFixedHeight(textHeight);
 
 	m_huLabel = new QLabel();
@@ -55,9 +55,10 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	m_huLabel->setFixedHeight(textHeight);
 
 	m_huLabelValue = new QLabel();
-	m_huLabelValue->setNum(m_HUValue);
+	m_huLabelValue->setText("");
 	m_huLabelValue->setFixedHeight(textHeight);
 
+	m_DisplayLayout->addStretch();
 	m_DisplayLayout->addWidget(m_xLabel);
 	m_DisplayLayout->addWidget(m_xLabelValue);
 	m_DisplayLayout->addWidget(m_yLabel);
@@ -66,16 +67,16 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	m_DisplayLayout->addWidget(m_zLabelValue);
 	m_DisplayLayout->addWidget(m_huLabel);
 	m_DisplayLayout->addWidget(m_huLabelValue);
+	m_DisplayLayout->addStretch();
 
-
-
-	//m_MainLayout->addLayout(m_DisplayLayout, 1, 0);
+	m_MainLayout->addLayout(m_DisplayLayout, 1, 0);
 
 	resize(width,height);
 
 	//resize(width, height);
 
 	QObject::connect(slicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), this, SLOT(updateVoxelInfo(QVector4D)));
+	QObject::connect(slicerWidget, SIGNAL(clearVoxelInfo()), this, SLOT(onClearVoxelInfo()));
 }
 
 
@@ -140,5 +141,15 @@ void SlicerDisplay::updateVoxelInfo(QVector4D voxelInfo)
 	m_yLabelValue->setNum(voxelInfo.y());
 	m_zLabelValue->setNum(voxelInfo.z());
 	m_huLabelValue->setNum(voxelInfo.w());
+	this->update();
+}
+
+void SlicerDisplay::onClearVoxelInfo()
+{
+	m_xLabelValue->setText("");
+	m_yLabelValue->setText("");
+	m_zLabelValue->setText("");
+	m_huLabelValue->setText("");
+	this->update();
 }
 

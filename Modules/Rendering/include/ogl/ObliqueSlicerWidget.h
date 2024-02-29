@@ -21,6 +21,13 @@ public:
 	ObliqueSlicerWidget(CTVolume *CTData, QWidget *parent = 0);
 	~ObliqueSlicerWidget();
 
+signals:
+	void sendVoxelInfo(QVector4D voxelInfo);
+	void clearVoxelInfo();
+
+public slots:
+	void receiveVoxelInfo(QVector4D voxelInfo);
+
 private:
 	void initializeGL() override;
 	void resizeGL(int w, int h) override;
@@ -33,13 +40,15 @@ private:
 	void keyPressEvent(QKeyEvent *e);
 	void keyReleaseEvent(QKeyEvent *e);
 
+	void updateVoxelInfo();
+
 	/* VARIABLES */
 public:
 private:
 	MainWindow* m_MainWindow;
 	CTVolume *m_CTData;
 
-	Camera6DoF m_Camera;
+	//Camera6DoF m_Camera;
 
 	//GLint m_AxialSliceSelect;
 	bool m_MouseLeftClick;

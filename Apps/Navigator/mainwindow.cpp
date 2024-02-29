@@ -118,19 +118,24 @@ void MainWindow::loadAnalzeImage(const std::string& headerFilePath)
 		QObject::connect(sagittalSlicerWidget, SIGNAL(sagittalSliceSelect(QVector2D)), axialSlicerWidget, SLOT(sagittalChangeSlice(QVector2D)));
 
 		auto axialSlicerDisplay = new SlicerDisplay(axialSlicerWidget, 300, (300 / ctVolume->getAxialAspectRatio()));
-		//axialSlicerDisplay->setMinimumHeight(250);
 		axialSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
 		auto coronalSlicerDisplay = new SlicerDisplay(coronalSlicerWidget, 300, (300 / ctVolume->getCoronalAspectRatio()));
-		//coronalSlicerDisplay->setMinimumHeight(250);
 		coronalSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
 		auto sagittalSlicerDisplay = new SlicerDisplay(sagittalSlicerWidget, 300, (300 / ctVolume->getSagittalAspectRatio()));
-		//sagittalSlicerDisplay->setMinimumHeight(250);
 		sagittalSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 		auto obliqueSlicerWidget = new ObliqueSlicerWidget(ctVolume);
 		auto obliqueSlicerDisplay = new SlicerDisplay(obliqueSlicerWidget, 300, 300);
 		obliqueSlicerDisplay->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		//obliqueSlicerDisplay->setMinimumHeight(250);
+
+		QObject::connect(axialSlicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), obliqueSlicerWidget, SLOT(receiveVoxelInfo(QVector4D)));
+		QObject::connect(coronalSlicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), obliqueSlicerWidget, SLOT(receiveVoxelInfo(QVector4D)));
+		QObject::connect(sagittalSlicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), obliqueSlicerWidget, SLOT(receiveVoxelInfo(QVector4D)));
+		QObject::connect(obliqueSlicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), axialSlicerWidget, SLOT(receiveVoxelInfo(QVector4D)));
+		QObject::connect(obliqueSlicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), coronalSlicerWidget, SLOT(receiveVoxelInfo(QVector4D)));
+		QObject::connect(obliqueSlicerWidget, SIGNAL(sendVoxelInfo(QVector4D)), sagittalSlicerWidget, SLOT(receiveVoxelInfo(QVector4D)));
 
 		QGridLayout* gridLayout = new QGridLayout();
 		gridLayout->addWidget(axialSlicerDisplay, 0, 0);

@@ -34,10 +34,12 @@ public:
 signals:
 	void coronalSliceSelect(QVector2D sliceSelectLocation);
 	void sendVoxelInfo(QVector4D voxelInfo);
+	void clearVoxelInfo();
 
 public slots:
 	void axialChangeSlice(QVector2D sliceSelectLocation);
 	void sagittalChangeSlice(QVector2D sliceSelectLocation);
+	void receiveVoxelInfo(QVector4D voxelInfo);
 
 private:
 	void initializeGL() override;

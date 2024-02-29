@@ -68,7 +68,8 @@ void AxialSlicerWidget::sagittalChangeSlice(QVector2D sliceSelectLocation)
 	}
 	m_SlicerBase.updateSliceSelect(m_AxialSliceSelect);
 	m_SlicerBase.cursorOff();
-	update();
+	emit clearVoxelInfo();
+	update();	
 }
 
 void AxialSlicerWidget::coronalChangeSlice(QVector2D sliceSelectLocation)
@@ -90,6 +91,14 @@ void AxialSlicerWidget::coronalChangeSlice(QVector2D sliceSelectLocation)
 	}
 	m_SlicerBase.updateSliceSelect(m_AxialSliceSelect);
 	m_SlicerBase.cursorOff();
+	emit clearVoxelInfo();
+	update();	
+}
+
+void AxialSlicerWidget::receiveVoxelInfo(QVector4D voxelInfo)
+{
+	m_SlicerBase.cursorOff();
+	emit clearVoxelInfo();
 	update();
 }
 
@@ -134,17 +143,15 @@ void AxialSlicerWidget::sendSliceSelect(QVector2D sliceSelectLocation)
 	emit axialSliceSelect(sliceSelectLocation);
 
 	// To select voxel from CT Data
-	//int xVox = static_cast<int>(xLoc);
-	//int yVox = static_cast<int>(yLoc);
-	//int zVox = static_cast<int>(m_AxialSliceSelect);
-
-	int t1 = 1;
-	int t2 = 1;
-	int t3 = 1;
-	int t4 = 1;
+	int xVox = static_cast<int>(round(sliceSelectLocation.x()));
+	int yVox = static_cast<int>(round(sliceSelectLocation.y()));
+	int zVox = static_cast<int>(m_AxialSliceSelect);
 
 	// Send information to SlicerMain for display
-	emit sendVoxelInfo(QVector4D(t1, t2, t3, t4));
+	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, 0));
+
+	// Send information to SlicerMain for display
+	//emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, m_CTData->getVoxel(xVox, yVox, zVox)));
 }
 
 void AxialSlicerWidget::mousePressEvent(QMouseEvent *e)

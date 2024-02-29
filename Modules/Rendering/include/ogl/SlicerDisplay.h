@@ -25,6 +25,7 @@ public:
 
 public slots:
 	void updateVoxelInfo(QVector4D voxelInfo);
+	void onClearVoxelInfo();
 
 private:
 	QOpenGLWidget *m_SlicerWidget;

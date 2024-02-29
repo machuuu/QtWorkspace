@@ -21,6 +21,14 @@ ObliqueSlicerWidget::~ObliqueSlicerWidget()
 
 }
 
+void ObliqueSlicerWidget::receiveVoxelInfo(QVector4D voxelInfo)
+{
+	m_ObliqueSlicerBase.setOrbitCenter(voxelInfo.x(), voxelInfo.y(), voxelInfo.z());
+	m_ObliqueSlicerBase.cursorOff();
+	emit clearVoxelInfo();
+	this->update();
+}
+
 void ObliqueSlicerWidget::initializeGL()
 {
 	if (gladLoadGL())
@@ -82,6 +90,7 @@ void ObliqueSlicerWidget::mousePressEvent(QMouseEvent *e)
 		m_MouseRightClick = true;
 		//m_Crosshair.updatePosition(QVector2D(e->pos()), width(), height());
 		m_ObliqueSlicerBase.cursorOn();
+		updateVoxelInfo();
 		//sendSliceSelect(m_SlicerBase.getSlicesToSend());
 		break;
 	default:
@@ -94,8 +103,6 @@ void ObliqueSlicerWidget::mousePressEvent(QMouseEvent *e)
 
 void ObliqueSlicerWidget::mouseMoveEvent(QMouseEvent *e)
 {
-	
-
 	// TODO: Add support so that SlicerBase sends the Signal rather than getting from Base and sending through sendSliceSelect
 	// Using mouse flags allows the other slices to be updated in real time.
 	if (m_MouseLeftClick)
@@ -104,9 +111,8 @@ void ObliqueSlicerWidget::mouseMoveEvent(QMouseEvent *e)
 	}
 	else if (m_MouseRightClick)
 	{
-		//m_Crosshair.updatePosition(QVector2D(e->pos()), width(), height());
-		//sendSliceSelect(m_SlicerBase.getSlicesToSend());
 		m_ObliqueSlicerBase.mouseOnMove(QVector2D(e->pos()));
+		updateVoxelInfo();
 	}
 	else
 	{
@@ -164,4 +170,16 @@ void ObliqueSlicerWidget::keyReleaseEvent(QKeyEvent *e)
 
 	update();
 	e->accept();
+}
+
+void ObliqueSlicerWidget::updateVoxelInfo()
+{
+	// To select voxel from CT Data
+	int xVox = 0;
+	int yVox = 0;
+	int zVox = 0;
+	m_ObliqueSlicerBase.getOrbitCenter(xVox, yVox, zVox);
+
+	// Send information to SlicerMain for display
+	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, 0));
 }

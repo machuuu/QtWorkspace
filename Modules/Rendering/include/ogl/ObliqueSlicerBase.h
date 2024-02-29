@@ -30,6 +30,9 @@ public:
 
 	void createSliceTexture() override;
 
+	void setOrbitCenter(int xVox, int yVox, int zVox);
+	void getOrbitCenter(int& xVox, int& yVox, int& zVox);
+
 	void mouseOnMove(QVector2D mousePosition) override;
 	void keyOnPress(int keySelect) override;
 	glm::vec3 getAspectRatioVector();
