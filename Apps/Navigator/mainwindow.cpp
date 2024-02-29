@@ -24,6 +24,8 @@
 #include "SagittalSlicerWidget.h"
 #include "SlicerDisplay.h"
 
+#include "Logger.h"
+
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 	, ui(new Ui::MainWindow)
@@ -77,7 +79,7 @@ void MainWindow::loadAirwaySurface(const std::string& filepath)
 	if (!filepath.empty())
 	{
 		auto airwayRenderWidget = new AirwayRenderWidget(filepath);
-		airwayRenderWidget->setMinimumSize(300, 300);
+		airwayRenderWidget->setMinimumHeight(300);
 		airwayRenderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 		QHBoxLayout* hLayout = new QHBoxLayout();
@@ -105,8 +107,11 @@ void MainWindow::loadAnalzeImage(const std::string& headerFilePath)
 		auto sagittalSlicerWidget = new SagittalSlicerWidget(ctVolume);
 
 		auto axialSlicerDisplay = new SlicerDisplay(axialSlicerWidget, 300, (300 / ctVolume->getAxialAspectRatio()));
+		axialSlicerDisplay->setMinimumHeight(300);
 		auto coronalSlicerDisplay = new SlicerDisplay(coronalSlicerWidget, 300, (300 / ctVolume->getCoronalAspectRatio()));
+		coronalSlicerDisplay->setMinimumHeight(300);
 		auto sagittalSlicerDisplay = new SlicerDisplay(sagittalSlicerWidget, 300, (300 / ctVolume->getSagittalAspectRatio()));
+		sagittalSlicerDisplay->setMinimumHeight(300);
 
 		QGridLayout* gridLayout = new QGridLayout();
 		gridLayout->addWidget(axialSlicerDisplay, 0, 0);

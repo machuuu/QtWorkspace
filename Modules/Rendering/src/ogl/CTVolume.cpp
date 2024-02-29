@@ -271,13 +271,13 @@ void CTVolume::readImage()
 		//byteBuffer = nullptr;
 		break;
 	case 32:
-		std::cout << "No Support for 4byte voxels. " << std::endl;
+		qDebug() << "No Support for 4byte voxels. ";
 		break;
 	case 64:
-		std::cout << "No Support for 8byte voxels. " << std::endl;
+		qDebug() << "No Support for 8byte voxels. ";
 		break;
 	default:
-		std::cout << "Bit depth for Voxels are not 8, 16, 32, or 64. " << std::endl;
+		qDebug() << "Bit depth for Voxels are not 8, 16, 32, or 64. ";
 		break;
 	}
 	fclose(pFile);

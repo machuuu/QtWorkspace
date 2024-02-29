@@ -5,57 +5,14 @@
 
 #include "rendering.configure.h"
 
-SlicerBase::SlicerBase(int slicerXDim, int slicerYDim, int slicerWidth, int slicerHeight, CTVolume *CTData) :
-	m_XVoxels(slicerXDim),
-	m_YVoxels(slicerYDim),
-	m_SlicerWidth(slicerWidth),
-	m_SlicerHeight(slicerHeight),
-	m_CTData(CTData),
-	m_ZoomAmount(1.0f),
-	m_SliceSelect(0),
-	m_ZoomSensitivity(0.01f),
-	m_MouseLeftClick(false),
-	m_MouseRightClick(false),
-	m_ShiftSelect(false),
-	m_CursorOn(false)
+SlicerBase::SlicerBase(int slicerXDim, int slicerYDim, int slicerWidth, int slicerHeight, CTVolume *CTData)
 {
-	setWindowParameters(LUNG);
-	
-	m_Camera.SetMouseMovementSpeed(0.0025f);
-	
-	m_TextureScale = glm::mat2(1.0f);
-	m_ModelScale = glm::mat4(1.0f);
-	m_Model = glm::mat4(1.0f);
-	m_View = glm::mat4(1.0f);
-	m_Projection = glm::mat4(1.0f);
-	m_OrthoProjPos = glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
+	initialize(slicerXDim, slicerYDim, slicerWidth, slicerHeight, CTData);
 }
-
-//SlicerBase::SlicerBase(int slicerWidth, int slicerHeight, CTVolume *CTData) :
-//	m_SlicerWidth(slicerWidth),
-//	m_SlicerHeight(slicerHeight),
-//	m_CTData(CTData),
-//	m_ZoomAmount(1.0f),
-//	m_SliceSelect(0),
-//	m_ZoomSensitivity(0.01f),
-//	m_MouseLeftClick(false),
-//	m_MouseRightClick(false),
-//	m_CursorOn(false)
-//{
-//	setWindowParameters(LUNG);
-//
-//	m_Camera.SetMouseMovementSpeed(0.0025f);
-//
-//	m_Scale = glm::mat4(1.0f);
-//	m_Model = glm::mat4(1.0f);
-//	m_View = glm::mat4(1.0f);
-//	m_Projection = glm::mat4(1.0f);
-//	m_OrthoProjPos = glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
-//}
 
 SlicerBase::SlicerBase()
 {
-
+	initialize(0, 0, 0, 0, nullptr);
 }
 
 SlicerBase::~SlicerBase()
@@ -67,6 +24,33 @@ SlicerBase::~SlicerBase()
 	glDeleteVertexArrays(1, &m_VertexArray);
 	glDeleteBuffers(1, &m_VertexBuffer);
 	glDeleteBuffers(1, &m_IndexBuffer);
+}
+
+void SlicerBase::initialize(int slicerXDim, int slicerYDim, int slicerWidth, int slicerHeight, CTVolume* CTData)
+{
+	m_XVoxels = slicerXDim;
+	m_YVoxels= slicerYDim;
+	m_SlicerWidth = slicerWidth;
+	m_SlicerHeight = slicerHeight;
+	m_CTData = CTData;
+	m_ZoomAmount = 1.0f;
+	m_SliceSelect = 0;
+	m_ZoomSensitivity = 0.01f;
+	m_MouseLeftClick = false;
+	m_MouseRightClick = false;
+	m_ShiftSelect = false;
+	m_CursorOn = false;
+
+	setWindowParameters(LUNG);
+
+	m_Camera.SetMouseMovementSpeed(0.0025f);
+
+	m_TextureScale = glm::mat2(1.0f);
+	m_ModelScale = glm::mat4(1.0f);
+	m_Model = glm::mat4(1.0f);
+	m_View = glm::mat4(1.0f);
+	m_Projection = glm::mat4(1.0f);
+	m_OrthoProjPos = glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
 }
 
 void SlicerBase::initializeTextures()
@@ -265,7 +249,7 @@ void SlicerBase::draw(SlicerSelect select)
 	drawSliceTexture();
 	drawCrosshair();
 
-	std::cout << m_SliceSelect << std::endl;
+	qDebug() << m_SliceSelect;
 }
 
 void SlicerBase::computeSliceTexture(SlicerSelect select)
@@ -363,7 +347,7 @@ void SlicerBase::setWindowParameters(WindowType select)
 	default:
 		m_WindowLevel = 0;
 		m_WindowWidth = 2000;
-		std::cout << "Window Level: " << m_WindowLevel << " Window Width: " << m_WindowWidth << std::endl;
+		qDebug() << "Window Level: " << m_WindowLevel << " Window Width: " << m_WindowWidth;
 	}
 }
 
@@ -563,7 +547,7 @@ void SlicerBase::createGrayColorMap(InterpolationSelect select)
 
 	default:
 
-		std::cout << "Select interpolate or linear for creating gray color map" << std::endl;
+		qDebug() << "Select interpolate or linear for creating gray color map";
 		break;
 	}
 }
@@ -653,14 +637,14 @@ GLuint SlicerBase::compileShader(GLuint type, const char* shaderPath)
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << shaderType << std::endl;
+		qDebug() << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << shaderType;
 	}
 	const char* shaderCode = code.c_str();
 	unsigned int id = glCreateShader(type);
 	glShaderSource(id, 1, &shaderCode, 0);
 	glCompileShader(id);
 
-	std::cout << "COMPILED SHADER::" << shaderType << std::endl;
+	qDebug() << "COMPILED SHADER::" << shaderType;
 
 	return id;
 }
@@ -676,7 +660,7 @@ void SlicerBase::checkCompileErrors(GLuint shader, std::string type)
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type:" << type << "\n" << infoLog << "\n ------------------------------------------------------ " << std::endl;
+			qDebug() << "ERROR::SHADER_COMPILATION_ERROR of type:" << type.c_str() << "\n" << infoLog << "\n ------------------------------------------------------ ";
 		}
 	}
 	else
@@ -686,7 +670,7 @@ void SlicerBase::checkCompileErrors(GLuint shader, std::string type)
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n ------------------------------------------------------ " << std::endl;
+			qDebug() << "ERROR::PROGRAM_LINKING_ERROR of type: " << type.c_str() << "\n" << infoLog << "\n ------------------------------------------------------ ";
 		}
 	}
 }

@@ -37,7 +37,7 @@ target_link_libraries(${TARGET_NAME}
     PRIVATE
         OpenGLRendering
         Logging
-        Qt6::Widgets      
+        Qt6::Widgets
 )
 
 set_target_properties(${TARGET_NAME} PROPERTIES

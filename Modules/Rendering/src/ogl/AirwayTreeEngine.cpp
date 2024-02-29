@@ -1,5 +1,6 @@
 #include "AirwayTreeEngine.h"
 #include <iostream>
+#include "Logger.h"
 
 #include <vtkPolyData.h>
 #include <vtkPolyDataReader.h>
@@ -20,6 +21,7 @@
 AirwayTree::AirwayTree(std::string filename)
 {
 	initAirwayTreeGeometry(filename);
+	qDebug() << "AirwayTree Constructor - Done";
 }
 
 AirwayTree::~AirwayTree()
@@ -140,7 +142,7 @@ void AirwayTree::initAirwayTreeGeometry(std::string filename)
 		// alert if any polygon is not a triangle (if assumption fails)
 		if (numIds > 3)
 		{
-			std::cout << "More than 3 vertices: " << numIds << "for cell: "<< cellLocation << std::endl;
+			qDebug() << "More than 3 vertices: " << numIds << "for cell: " << cellLocation;
 		}
 	}
 	
@@ -187,7 +189,7 @@ void AirwayTree::initAirwayTreeGeometry(std::string filename)
 		}
 		else
 		{
-			std::cout << "Triangle Assumption fails - polygon shape is not a triangle" << std::endl;
+			qDebug() << "Triangle Assumption fails - polygon shape is not a triangle";
 		}
 	}
 

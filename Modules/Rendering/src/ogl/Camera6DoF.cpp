@@ -1,5 +1,6 @@
 #include <Camera6DoF.h>
 #include <iostream>
+#include "Logger.h"
 
 // Default Constructor
 // Position at (0,0,0) and look in Z direction.
@@ -350,7 +351,7 @@ void Camera6DoF::CheckCameraVectors()
 	}
 
 	if (!perpendicularFlag1 || !perpendicularFlag2 || !perpendicularFlag3)
-		std::cout << "WARNING::Camera Right, Up and Front vectors are not all perpendicular." << std::endl;
+		qDebug() << "WARNING::Camera Right, Up and Front vectors are not all perpendicular.";
 }
 
 void Camera6DoF::FrontRotation(float deg)

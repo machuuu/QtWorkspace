@@ -6,6 +6,8 @@ SlicerDisplay::SlicerDisplay(QOpenGLWidget *slicerWidget, float width, float hei
 	m_arWidth(width),
 	m_arHeight(height)
 {
+	//slicerWidget->setParent(this);
+
 	m_MainLayout = new QGridLayout(this);
 	m_MainLayout->setContentsMargins(0, 0, 0, 0);
 	

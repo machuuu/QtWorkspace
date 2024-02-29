@@ -80,16 +80,16 @@ void SagittalSlicerWidget::initializeGL()
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
 	if (gladLoadGL())
-		std::cout << "GLAD Loaded" << std::endl;
+		qDebug() << "GLAD Loaded";
 	else
-		std::cout << "Error Loading GLAD" << std::endl;
+		qDebug() << "Error Loading GLAD";
 
-	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-	std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+	qDebug() << "OpenGL Version: " << glGetString(GL_VERSION);
+	qDebug() << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
 	glClearColor(0.5f, 0.1f, 0.1f, 1.0f);
 
-	m_SlicerBase = SlicerBase(m_CTData->getNumRows(), m_CTData->getNumSlices(), width(), height(), m_CTData);
+	m_SlicerBase.initialize(m_CTData->getNumRows(), m_CTData->getNumSlices(), width(), height(), m_CTData);
 
 	m_SlicerBase.initializeTextures();
 	m_SlicerBase.initializeShader(RENDERING_RESOURCES_DIR "/ogl/SlicerVertex.glsl", RENDERING_RESOURCES_DIR "/ogl/SlicerFragment.glsl");

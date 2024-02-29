@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "Logger.h"
 
 #include "rendering.configure.h"
 
@@ -15,6 +16,7 @@ AxialSlicerWidget::AxialSlicerWidget(CTVolume *CTData, MainWindow *mw) :
 	m_MouseLeftClick(false),
 	m_MouseRightClick(false)
 {
+	qDebug() << "Axial Slicer Widget ctor";
 	setFocusPolicy(Qt::StrongFocus);	
 }
 
@@ -42,6 +44,9 @@ AxialSlicerWidget::~AxialSlicerWidget()
 	//glDeleteBuffers(1, &m_VertexBuffer);
 	//glDeleteBuffers(1, &m_IndexBuffer);
 	//doneCurrent();
+	//this->makeCurrent();
+	//m_SlicerBase.releaseResources();
+	//this->doneCurrent();
 }
 
 void AxialSlicerWidget::sagittalChangeSlice(QVector2D sliceSelectLocation)
@@ -91,16 +96,16 @@ void AxialSlicerWidget::coronalChangeSlice(QVector2D sliceSelectLocation)
 void AxialSlicerWidget::initializeGL()
 {
 	if (gladLoadGL())
-		std::cout << "GLAD Loaded" << std::endl;
+		qDebug() << "GLAD Loaded";
 	else
-		std::cout << "Error Loading GLAD" << std::endl;
+		qDebug() << "Error Loading GLAD";
 
-	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-	std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+	qDebug() << "OpenGL Version: " << glGetString(GL_VERSION);
+	qDebug() << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
 	glClearColor(0.5f, 0.1f, 0.1f, 1.0f);	
 	
-	m_SlicerBase = SlicerBase(m_CTData->getNumColumns(), m_CTData->getNumRows(), width(), height(), m_CTData);
+	m_SlicerBase.initialize(m_CTData->getNumColumns(), m_CTData->getNumRows(), width(), height(), m_CTData);
 	
 	m_SlicerBase.initializeTextures();
 	m_SlicerBase.initializeShader(RENDERING_RESOURCES_DIR "/ogl/SlicerVertex.glsl", RENDERING_RESOURCES_DIR "/ogl/SlicerFragment.glsl");

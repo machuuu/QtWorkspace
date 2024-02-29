@@ -56,6 +56,7 @@
 #include <sstream>
 #include <math.h>
 #include <limits>
+#include "Logger.h"
 
 #include "rendering.configure.h"
 
@@ -80,6 +81,8 @@ AirwayRenderWidget::AirwayRenderWidget(const std::string& filePath, QWidget *par
 	// Set the filepath of the geometry
 	// TODO :: Validity check
 	airwayTreeFilepath = filePath;
+
+	qDebug() << "AirwayRenderWidget Constructor - Done";
 }
 
 AirwayRenderWidget::~AirwayRenderWidget()
@@ -97,9 +100,9 @@ void AirwayRenderWidget::initializeGL()
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
 	if (gladLoadGL())
-		std::cout << "GLAD Loaded" << std::endl;
+		qDebug() << "GLAD Loaded";
 	else
-		std::cout << "Error Loading GLAD" << std::endl;
+		qDebug() << "Error Loading GLAD";
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	
@@ -167,10 +170,9 @@ void AirwayRenderWidget::paintGL()
 	glm::vec3 front = camera.GetFront();
 	camera.GetCameraParameters(cameraParameters);
 	
-	std::cout << std::endl;
-	std::cout << "Front Direction: " << front.x << " " << front.y << " " << front.z << std::endl;
-	std::cout << "Model Offset: " << modelOffset.x << " " << modelOffset.y << " " << modelOffset.z << std::endl;
-	std::cout << "Roll: " << cameraParameters[ROLLCOORD] << " Pitch: " << cameraParameters[PITCHCOORD] << " Yaw: " << cameraParameters[YAWCOORD] << std::endl;
+	qDebug() << "Front Direction: " << front.x << " " << front.y << " " << front.z;
+	qDebug() << "Model Offset: " << modelOffset.x << " " << modelOffset.y << " " << modelOffset.z;
+	qDebug() << "Roll: " << cameraParameters[ROLLCOORD] << " Pitch: " << cameraParameters[PITCHCOORD] << " Yaw: " << cameraParameters[YAWCOORD];
 
 	mmOpenGLClearErrorMacro();
 
@@ -298,14 +300,14 @@ unsigned int AirwayRenderWidget::compileShader(unsigned int type, const char* sh
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << shaderType << std::endl;
+		qDebug() << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << shaderType;
 	}
 	const char* shaderCode = code.c_str();
 	unsigned int id = glCreateShader(type);
 	glShaderSource(id, 1, &shaderCode, 0);
 	glCompileShader(id);
 
-	std::cout << "COMPILED SHADER::" << shaderType << std::endl;
+	qDebug() << "COMPILED SHADER::" << shaderType;
 
 	return id;
 }
@@ -321,7 +323,7 @@ void AirwayRenderWidget::checkCompileErrors(unsigned int shader, std::string typ
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type:" << type << "\n" << infoLog << "\n ------------------------------------------------------ " << std::endl;
+			qDebug() << "ERROR::SHADER_COMPILATION_ERROR of type:" << type.c_str() << "\n" << infoLog << "\n ------------------------------------------------------ ";
 		}
 	}
 	else
@@ -330,7 +332,7 @@ void AirwayRenderWidget::checkCompileErrors(unsigned int shader, std::string typ
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n ------------------------------------------------------ " << std::endl;
+			qDebug() << "ERROR::PROGRAM_LINKING_ERROR of type: " << type.c_str() << "\n" << infoLog << "\n ------------------------------------------------------ ";
 		}
 	}
 }

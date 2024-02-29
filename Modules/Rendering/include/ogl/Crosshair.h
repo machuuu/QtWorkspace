@@ -17,8 +17,13 @@ class Crosshair
 {
 public:
 	Crosshair();
-	Crosshair(glm::vec2 center);
 	~Crosshair();
+
+	Crosshair(const Crosshair&) = delete;
+	Crosshair(Crosshair&&) = delete;
+	Crosshair& operator=(const Crosshair&) = delete;
+	Crosshair& operator=(Crosshair&&) = delete;
+
 	void draw();
 	void updatePosition(QVector2D mouseLocation, int screenWidth, int screenHeight);
 	void init(glm::vec2 center);
@@ -26,7 +31,6 @@ public:
 private:
 	void initGeometry(glm::vec2 center);
 	void initShaders();
-	
 
 private:
 

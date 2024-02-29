@@ -11,8 +11,11 @@ Crosshair::Crosshair()
 
 Crosshair::~Crosshair()
 {
+	mmOpenGLClearErrorMacro();
 	glDeleteVertexArrays(1, &m_VertexArray);
 	glDeleteBuffers(1, &m_VertexBuffer);
+
+	mmOpenGLCheckErrorMacro("Error with drawing crosshair - OpenGL");
 }
 
 void Crosshair::draw()
@@ -91,4 +94,3 @@ void Crosshair::init(glm::vec2 center)
 	initGeometry(m_Center);
 	initShaders();
 }
-

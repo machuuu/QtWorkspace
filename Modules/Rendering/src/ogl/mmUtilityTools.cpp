@@ -1,6 +1,7 @@
 
 
 #include "mmUtilityTools.h"
+#include "Logger.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -212,7 +213,7 @@ namespace mm
 
 		default:
 
-			std::cout << "Select interpolate or linear for creating gray color map" << std::endl;
+			qDebug() << "Select interpolate or linear for creating gray color map";
 			break;
 		}
 		
@@ -291,14 +292,14 @@ namespace mm
 		}
 		catch (std::ifstream::failure e)
 		{
-			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << shaderType << std::endl;
+			qDebug() << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << shaderType;
 		}
 		const char* shaderCode = code.c_str();
 		unsigned int id = glCreateShader(type);
 		glShaderSource(id, 1, &shaderCode, 0);
 		glCompileShader(id);
 
-		std::cout << "COMPILED SHADER::" << shaderType << std::endl;
+		qDebug() << "COMPILED SHADER::" << shaderType;
 
 		return id;
 	}
@@ -321,7 +322,7 @@ namespace mm
 		default:
 			windowLevel = 0;
 			windowWidth = 2000;
-			std::cout << "Window Level: " << windowLevel << " Window Width: " << windowWidth << std::endl;
+			qDebug() << "Window Level: " << windowLevel << " Window Width: " << windowWidth;
 		}
 	}
 
@@ -336,7 +337,7 @@ namespace mm
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);				
-				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type:" << type << "\n" << infoLog << "\n ------------------------------------------------------ " << std::endl;
+				qDebug() << "ERROR::SHADER_COMPILATION_ERROR of type:" << type.c_str() << "\n" << infoLog << "\n ------------------------------------------------------ ";
 			}
 		}
 		else
@@ -346,7 +347,7 @@ namespace mm
 			if (!success)
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n ------------------------------------------------------ " << std::endl;
+				qDebug() << "ERROR::PROGRAM_LINKING_ERROR of type: " << type.c_str() << "\n" << infoLog << "\n ------------------------------------------------------ ";
 			}
 		}
 	}

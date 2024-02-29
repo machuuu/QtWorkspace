@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "Logger.h"
 #include <iostream>
 #include <ostream>
 #include <sstream>
@@ -81,7 +82,8 @@ inline void mmClearOpenGLErrors(const unsigned int maxErrors = 16)
 	if (numErrors)															\
 	{																		\
 		std::ostringstream oss;												\
-		mmPrintOpenGLErrors(oss, maxErrors, numErrors, errCode, errDesc);	\
-		std::cout << message << "\n " << oss.str().c_str() << std::endl;	\
+		oss << message << std::endl;										\
+		mmPrintOpenGLErrors(oss, maxErrors, numErrors, errCode, errDesc);   \
+		qDebug() << oss.str().c_str();										\
 	}																		\
-}
+}																			\
