@@ -40,7 +40,7 @@ private:
 	void keyPressEvent(QKeyEvent *e);
 	void keyReleaseEvent(QKeyEvent *e);
 
-	void updateVoxelInfo();
+	void updateVoxelInfo(const QVector2D& mousePosition);
 
 	/* VARIABLES */
 public:

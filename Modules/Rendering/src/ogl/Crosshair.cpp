@@ -94,3 +94,8 @@ void Crosshair::init(glm::vec2 center)
 	initGeometry(m_Center);
 	initShaders();
 }
+
+void Crosshair::getPosition()
+{
+
+}

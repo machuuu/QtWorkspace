@@ -154,6 +154,29 @@ void ObliqueSlicerBase::getOrbitCenter(int& xVox, int& yVox, int& zVox)
 	zVox = round(offset.z);
 }
 
+void ObliqueSlicerBase::getSelectedVoxel(const QVector2D& mousePosition, int& xVox, int& yVox, int& zVox, int& huValue)
+{
+	QVector2D screenCenter = QVector2D(static_cast<float>(m_SlicerWidth) * (0.5f), static_cast<float>(m_SlicerHeight) * (0.5f));
+	float xLoc = mousePosition.x() - screenCenter.x();
+	float yLoc = mousePosition.y() - screenCenter.y();
+
+	// Compute Voxel Offset relative to Mouse Position on the Display Texture
+	auto rightVectorNorm = glm::normalize(m_Camera.GetRight());
+	auto upVectorNorm = glm::normalize(m_Camera.GetUp());
+
+	float rightVoxOffset = (xLoc / (m_SlicerWidth / 2.0)) * (m_TextureWidth / 2.0);
+	float upVoxOffset = (yLoc / (m_SlicerHeight / 2.0)) * (m_TextureHeight / 2.0);
+	
+	auto voxOffset = rightVectorNorm * rightVoxOffset + upVoxOffset * upVectorNorm;
+	auto voxLocation = voxOffset + m_Camera.GetModelOffset();
+
+	// Get HU Value
+	xVox = static_cast<int>(round(voxLocation.x));
+	yVox = static_cast<int>(round(voxLocation.y));
+	zVox = static_cast<int>(round(voxLocation.z));
+	huValue = static_cast<int>(std::round(m_CTData->getVoxel(xVox, yVox, zVox)));
+}
+
 void ObliqueSlicerBase::mouseOnMove(QVector2D mousePosition)
 {
 	float xoffset = mousePosition.x() - m_MouseLastPosition.x();

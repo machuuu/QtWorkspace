@@ -33,4 +33,5 @@ Tasks:
     1. Online photo gallary with each client controlling a camera to view a wall of custom photos.
 1. Migrate my existing OpenGL rendering
     1. Properly forward declare the class definitions and define an public / private interface
+    1. All the Axial / Sagittal / Coronal Slicers can be migrated into one ObliqueSlicer where the direction is fixed. I don't think it is worth fixing at the moment as there are other things to learn.
 1. Create Install CMake Target for a Module with the VCPKG tool to help bundle dependencies

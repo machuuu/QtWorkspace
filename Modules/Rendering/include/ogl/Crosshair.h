@@ -28,6 +28,8 @@ public:
 	void updatePosition(QVector2D mouseLocation, int screenWidth, int screenHeight);
 	void init(glm::vec2 center);
 
+	void getPosition();
+
 private:
 	void initGeometry(glm::vec2 center);
 	void initShaders();

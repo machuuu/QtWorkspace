@@ -90,7 +90,7 @@ void ObliqueSlicerWidget::mousePressEvent(QMouseEvent *e)
 		m_MouseRightClick = true;
 		//m_Crosshair.updatePosition(QVector2D(e->pos()), width(), height());
 		m_ObliqueSlicerBase.cursorOn();
-		updateVoxelInfo();
+		updateVoxelInfo(QVector2D(e->pos()));
 		//sendSliceSelect(m_SlicerBase.getSlicesToSend());
 		break;
 	default:
@@ -112,7 +112,7 @@ void ObliqueSlicerWidget::mouseMoveEvent(QMouseEvent *e)
 	else if (m_MouseRightClick)
 	{
 		m_ObliqueSlicerBase.mouseOnMove(QVector2D(e->pos()));
-		updateVoxelInfo();
+		updateVoxelInfo(QVector2D(e->pos()));
 	}
 	else
 	{
@@ -172,14 +172,15 @@ void ObliqueSlicerWidget::keyReleaseEvent(QKeyEvent *e)
 	e->accept();
 }
 
-void ObliqueSlicerWidget::updateVoxelInfo()
+void ObliqueSlicerWidget::updateVoxelInfo(const QVector2D& mousePosition)
 {
 	// To select voxel from CT Data
 	int xVox = 0;
 	int yVox = 0;
 	int zVox = 0;
-	m_ObliqueSlicerBase.getOrbitCenter(xVox, yVox, zVox);
+	int huValue = 0;
+	m_ObliqueSlicerBase.getSelectedVoxel(mousePosition, xVox, yVox, zVox, huValue);
 
 	// Send information to SlicerMain for display
-	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, 0));
+	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, huValue));
 }

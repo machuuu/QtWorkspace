@@ -37,6 +37,8 @@ public:
 	float getCoronalAspectRatio();
 	float getSagittalAspectRatio();
 
+	bool isInBounds(const int& x, const int& y, const int& z);
+
 	/* OpenGL members */
 	GLuint getTextureID();
 	void init3DTexture();

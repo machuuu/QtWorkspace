@@ -130,7 +130,14 @@ std::vector<float> CTVolume::getFlatData()
 
 float CTVolume::getVoxel(int x, int y, int z)
 {
-	return m_vData.at(x + m_nColumns * y + m_nSliceSize * z);
+	if (isInBounds(x, y, z))
+	{
+		return m_vData.at(x + m_nColumns * y + m_nSliceSize * z);
+	}
+	else
+	{
+		return -1;
+	}	
 }
 
 float CTVolume::getAxialAspectRatio()
@@ -146,6 +153,18 @@ float CTVolume::getCoronalAspectRatio()
 float CTVolume::getSagittalAspectRatio()
 {
 	return ((m_nRows*m_fXDelta) / (m_nSlices*m_fZDelta));
+}
+
+bool CTVolume::isInBounds(const int& x, const int& y, const int& z)
+{
+	if ((x >= 0) && (x < m_nRows) && (y >= 0) && (x < m_nRows) && (z >= 0) && (z < m_nSlices))
+	{
+		return true;
+	}
+	else 
+	{
+		return false;
+	}
 }
 
 GLuint CTVolume::getTextureID()

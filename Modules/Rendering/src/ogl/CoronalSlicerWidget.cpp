@@ -127,9 +127,10 @@ void CoronalSlicerWidget::sendSliceSelect(QVector2D sliceSelectLocation)
 	int xVox = static_cast<int>(round(sliceSelectLocation.x()));
 	int yVox = static_cast<int>(m_CoronalSliceSelect);
 	int zVox = static_cast<int>(round(sliceSelectLocation.y()));
+	int huVal = static_cast<int>(std::round(m_CTData->getVoxel(xVox, yVox, zVox)));
 
 	// Send information to SlicerMain for display
-	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, 0));
+	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, huVal));
 
 	// Send information to SlicerMain for display
 	//emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, m_CTData->getVoxel(xVox, yVox, zVox)));
@@ -149,12 +150,16 @@ void CoronalSlicerWidget::keyPressEvent(QKeyEvent *e)
 		if (m_CoronalSliceSelect >= m_CTData->getNumRows())
 			m_CoronalSliceSelect = m_CTData->getNumRows() - 1;
 		m_SlicerBase.updateSliceSelect(m_CoronalSliceSelect);
+		m_SlicerBase.cursorOff();
+		emit clearVoxelInfo();
 		break;
 	case Qt::Key_S:
 		m_CoronalSliceSelect--;
 		if (m_CoronalSliceSelect < 0)
 			m_CoronalSliceSelect = 0;
 		m_SlicerBase.updateSliceSelect(m_CoronalSliceSelect);
+		m_SlicerBase.cursorOff();
+		emit clearVoxelInfo();
 		break;
 	default:
 		break;
@@ -197,7 +202,8 @@ void CoronalSlicerWidget::mouseMoveEvent(QMouseEvent *e)
 	// Using mouse flags allows the other slices to be updated in real time.
 	if (m_MouseLeftClick)
 	{
-
+		m_SlicerBase.cursorOff();
+		emit clearVoxelInfo();
 	}
 	else if (m_MouseRightClick)
 	{
@@ -222,6 +228,7 @@ void CoronalSlicerWidget::mouseReleaseEvent(QMouseEvent *e)
 void CoronalSlicerWidget::wheelEvent(QWheelEvent *e)
 {
 	m_SlicerBase.mouseOnWheel(e->angleDelta().y());
+	emit clearVoxelInfo();
 	update();
 }
 

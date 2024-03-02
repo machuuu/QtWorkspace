@@ -32,6 +32,7 @@ public:
 
 	void setOrbitCenter(int xVox, int yVox, int zVox);
 	void getOrbitCenter(int& xVox, int& yVox, int& zVox);
+	void getSelectedVoxel(const QVector2D& mousePosition, int& xVox, int& yVox, int& zVox, int& huValue);
 
 	void mouseOnMove(QVector2D mousePosition) override;
 	void keyOnPress(int keySelect) override;

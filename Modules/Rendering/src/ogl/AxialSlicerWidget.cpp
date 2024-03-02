@@ -146,9 +146,10 @@ void AxialSlicerWidget::sendSliceSelect(QVector2D sliceSelectLocation)
 	int xVox = static_cast<int>(round(sliceSelectLocation.x()));
 	int yVox = static_cast<int>(round(sliceSelectLocation.y()));
 	int zVox = static_cast<int>(m_AxialSliceSelect);
+	int huVal = static_cast<int>(std::round(m_CTData->getVoxel(xVox, yVox, zVox)));
 
 	// Send information to SlicerMain for display
-	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, 0));
+	emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, huVal));
 
 	// Send information to SlicerMain for display
 	//emit sendVoxelInfo(QVector4D(xVox, yVox, zVox, m_CTData->getVoxel(xVox, yVox, zVox)));
@@ -187,7 +188,8 @@ void AxialSlicerWidget::mouseMoveEvent(QMouseEvent *e)
 	// Using mouse flags allows the other slices to be updated in real time.
 	if (m_MouseLeftClick)
 	{
-
+		m_SlicerBase.cursorOff();
+		emit clearVoxelInfo();
 	}
 	else if (m_MouseRightClick)
 	{
@@ -212,6 +214,7 @@ void AxialSlicerWidget::mouseReleaseEvent(QMouseEvent *e)
 void AxialSlicerWidget::wheelEvent(QWheelEvent *e)
 {
 	m_SlicerBase.mouseOnWheel(e->angleDelta().y());
+	emit clearVoxelInfo();
 	update();	
 }
 
@@ -229,12 +232,16 @@ void AxialSlicerWidget::keyPressEvent(QKeyEvent *e)
 		if (m_AxialSliceSelect >= m_CTData->getNumSlices())
 			m_AxialSliceSelect = m_CTData->getNumSlices() - 1;
 		m_SlicerBase.updateSliceSelect(m_AxialSliceSelect);
+		m_SlicerBase.cursorOff();
+		emit clearVoxelInfo();
 		break;
 	case Qt::Key_S:
 		m_AxialSliceSelect--;
 		if (m_AxialSliceSelect < 0)
 			m_AxialSliceSelect = 0;
 		m_SlicerBase.updateSliceSelect(m_AxialSliceSelect);
+		m_SlicerBase.cursorOff();
+		emit clearVoxelInfo();
 		break;
 	default:
 		break;

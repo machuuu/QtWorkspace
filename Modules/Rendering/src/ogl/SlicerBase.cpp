@@ -206,6 +206,7 @@ void SlicerBase::mouseOnWheel(int wheelDelta)
 	m_Camera.SetMouseMovementSpeed(m_ZoomAmount * m_ZoomSensitivity);
 
 	updateProjectionMatrix(fromZoom);
+	cursorOff();
 }
 
 void SlicerBase::keyOnPress(int keySelect)
@@ -364,7 +365,7 @@ void SlicerBase::computeSlicesToSend(QVector2D mousePosition)
 	QVector2D screenCenter = QVector2D(static_cast<float>(m_SlicerWidth) * (0.5f), static_cast<float>(m_SlicerHeight) * (0.5f));
 
 	// Slice offset as screen pixels instead of screen clip space x[-1,1] y[-1,1]
-	QVector2D sliceOffsetPixels = QVector2D(static_cast<float>(m_SlicerWidth) * 0.5f * sliceOffset.z, static_cast<float>(m_SlicerHeight) * 0.5f * sliceOffset.y);
+	QVector2D sliceOffsetPixels = QVector2D(static_cast<float>(m_SlicerWidth) * 0.5f * sliceOffset.x, static_cast<float>(m_SlicerHeight) * 0.5f * sliceOffset.y);
 
 	// Account for screen size being different than voxel dimensions (different aspect ratios)
 	// ie: the voxel dimension a pixel should represent in screen's x and y direction
