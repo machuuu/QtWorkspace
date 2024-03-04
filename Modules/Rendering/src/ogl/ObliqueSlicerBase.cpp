@@ -48,7 +48,7 @@ void ObliqueSlicerBase::draw(SlicerSelect select)
 	drawSliceTexture();
 	drawCrosshair();
 
-	std::cout << m_SliceSelect << std::endl;
+	qDebug() << m_SliceSelect;
 }
 
 void ObliqueSlicerBase::computeSliceTexture(SlicerSelect select)

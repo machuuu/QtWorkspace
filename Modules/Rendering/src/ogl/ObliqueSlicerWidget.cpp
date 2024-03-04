@@ -32,30 +32,30 @@ void ObliqueSlicerWidget::receiveVoxelInfo(QVector4D voxelInfo)
 void ObliqueSlicerWidget::initializeGL()
 {
 	if (gladLoadGL())
-		std::cout << "GLAD Loaded" << std::endl;
+		qDebug() << "GLAD Loaded";
 	else
-		std::cout << "Error Loading GLAD" << std::endl;
+		qDebug() << "Error Loading GLAD";
 
-	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-	std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+	qDebug() << "OpenGL Version: " << glGetString(GL_VERSION);
+	qDebug() << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION);
 
 	m_ObliqueSlicerBase.initialize(m_CTData->getNumColumns(), m_CTData->getNumRows(), m_CTData->getNumSlices(), width(), height(), m_CTData);
 	
 	GLint maxWorkGroupInvo;
 	glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &maxWorkGroupInvo);
-	std::cout << "GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS " << maxWorkGroupInvo << std::endl;
+	qDebug() << "GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS " << maxWorkGroupInvo;
 
 	GLint maxComputeWorkGroupCount[3] = { 0 };
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &maxComputeWorkGroupCount[0]);
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &maxComputeWorkGroupCount[1]);
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &maxComputeWorkGroupCount[2]);
-	std::cout << "GL_MAX_COMPUTE_WORK_GROUP_COUNT " << maxComputeWorkGroupCount[0] << " " << maxComputeWorkGroupCount[1] << " " << maxComputeWorkGroupCount[2] << std::endl;
+	qDebug() << "GL_MAX_COMPUTE_WORK_GROUP_COUNT " << maxComputeWorkGroupCount[0] << " " << maxComputeWorkGroupCount[1] << " " << maxComputeWorkGroupCount[2];
 
 	GLint maxComputeWorkGroupSize[3] = { 0 };
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &maxComputeWorkGroupSize[0]);
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &maxComputeWorkGroupSize[1]);
 	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &maxComputeWorkGroupSize[2]);
-	std::cout << "GL_MAX_COMPUTE_WORK_GROUP_SIZE " << maxComputeWorkGroupSize[0] << " " << maxComputeWorkGroupSize[1] << " " << maxComputeWorkGroupSize[2] << std::endl;
+	qDebug() << "GL_MAX_COMPUTE_WORK_GROUP_SIZE " << maxComputeWorkGroupSize[0] << " " << maxComputeWorkGroupSize[1] << " " << maxComputeWorkGroupSize[2];
 
 
 	m_ObliqueSlicerBase.initializeTextures();
