@@ -87,7 +87,7 @@ void MainWindow::loadAirwaySurface(const std::string& filepath)
 		hLayout->addWidget(airwayRenderWidget);
 
 		ui->airwaySurfaceWidget->setLayout(hLayout);
-		//ui->airwaySurfaceWidget->setMinimumHeight(300);
+		ui->airwaySurfaceWidget->setMinimumWidth(300);
 
 		ui->loadAirwaySurfaceWidget->hide();
 		ui->airwaySurfaceWidget->show();
@@ -140,11 +140,10 @@ void MainWindow::loadAnalzeImage(const std::string& headerFilePath)
 		QGridLayout* gridLayout = new QGridLayout();
 		gridLayout->addWidget(axialSlicerDisplay, 0, 0);
 		gridLayout->addWidget(coronalSlicerDisplay, 0, 1);
-		gridLayout->addWidget(sagittalSlicerDisplay, 0, 2);
+		gridLayout->addWidget(sagittalSlicerDisplay, 1, 0);
 		gridLayout->addWidget(obliqueSlicerDisplay, 1, 1);
 		gridLayout->setColumnStretch(0, 1);
 		gridLayout->setColumnStretch(1, 1);
-		gridLayout->setColumnStretch(2, 1);
 		ui->analyzeImageWidget->setLayout(gridLayout);
 		//ui->analyzeImageWidget->setMinimumHeight(600);
 

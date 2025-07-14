@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1003</width>
+    <width>939</width>
     <height>698</height>
    </rect>
   </property>
@@ -30,7 +30,7 @@
        <cursorShape>ArrowCursor</cursorShape>
       </property>
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QWidget" name="verticalLayoutWidget">
        <layout class="QVBoxLayout" name="airwaySurfaceLayout">
@@ -189,7 +189,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1003</width>
+     <width>939</width>
      <height>22</height>
     </rect>
    </property>
